@@ -24,7 +24,24 @@
         }
 
         * {
+        /* Root Variables */
+        :root {
+            --primary: #3b5998;
+            --primary-light: #2e4874;
+            --bg-light: #f7f9fc;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --radius: 8px;
+            --transition: 0.3s;
+        }
+
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
             padding: 0;
             box-sizing: border-box;
         }
@@ -81,11 +98,21 @@
         .topbar {
             background: #fff;
             padding: 15px 30px;
+        /* Top Navbar */
+        .topbar {
+            background: #fff;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
+        .topbar .search {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
         .topbar .search {
             flex: 1;
             max-width: 400px;
@@ -101,13 +128,38 @@
         .topbar .actions {
             display: flex;
             align-items: center;
+        .topbar .search input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
         }
+        .topbar .actions {
+            display: flex;
+            align-items: center;
+        }
+        .topbar .actions .icon-btn {
+            background: none;
         .topbar .actions .icon-btn {
             background: none;
             border: none;
             margin-left: 15px;
             font-size: 1.2rem;
+            margin-left: 15px;
+            font-size: 1.2rem;
             cursor: pointer;
+            color: var(--text-color);
+            position: relative;
+        }
+        .topbar .actions .icon-btn .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            padding: 2px 6px;
             color: var(--text-color);
             position: relative;
         }
@@ -217,19 +269,25 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar Navigation -->
-    <aside class="sidebar">
-    <div class="logo"><i class="bx bx-recycle"></i> WMS Admin</div>
+    <!-- Navigation Bar -->
     <nav>
         <ul>
-        <li><a href="homepage.html" class="active"><i class="bx bx-home"></i> Dashboard</a></li>
-        <li><a href="wasteForm.html"><i class="bx bx-plus-circle"></i> Schedule Waste</a></li>
-        <li><a href="reports.html"><i class="bx bx-file"></i> Reports</a></li>
-        <li><a href="users.html"><i class="bx bx-user"></i> Users</a></li>
-        <li><a href="settings.html"><i class="bx bx-cog"></i> Settings</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#Form">Waste Form</a></li>
+            <li><a href="#reports">Reports</a></li>
         </ul>
+        <button id="logout">Logout</button>
     </nav>
-    </aside>
+
+    <!-- Header -->
+<header>
+  <h1>
+    Waste Management Dashboard
+    <span class="admin-badge">
+      <i class="fas fa-user-shield"></i> Admin
+    </span>
+  </h1>
+</header>
 
 
     <!-- Main Content -->
