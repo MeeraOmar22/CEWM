@@ -17,7 +17,7 @@ const db = getFirestore(app);
     } catch (error) {
         console.error("Firestore connection failed:", error);
     }
-});
+})();
 
 /**
  * Fetch waste form data from Firestore.
