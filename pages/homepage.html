@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Employee Waste Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste Management Dashboard</title>
     <style>
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(to bottom, rgba(76, 175, 80, 0.8), rgba(255, 255, 255, 0.7)), 
-                url('dashboard.jpg'); 
+            background: linear-gradient(to bottom, rgba(59, 89, 152, 0.8), rgba(255, 255, 255, 0.7)), 
+                url('../images/dashboard.jpg');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             color: #333;
         }
 
+        /* Navigation Bar */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px 30px;
-            background-color: #4CAF50;
+            background-color: #3b5998;
             color: white;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
@@ -45,7 +46,7 @@
 
         nav button {
             background-color: #fff;
-            color: #4CAF50;
+            color: #3b5998;
             border: none;
             padding: 8px 15px;
             border-radius: 5px;
@@ -61,13 +62,13 @@
             text-align: center;
             padding: 20px;
             background-color: #f3f4f6;
-            border-bottom: 2px solid #c8e6c9;
+            border-bottom: 2px solid #d1d5db;
         }
 
         header h1 {
             margin: 0;
             font-size: 2.5rem;
-            color: #4CAF50;
+            color: #3b5998;
         }
 
         .container {
@@ -119,11 +120,11 @@
 
         .dashboard-card h3 {
             margin-bottom: 15px;
-            color: #4CAF50;
+            color: #3b5998;
         }
 
         .dashboard-card button {
-            background-color: #4CAF50;
+            background-color: #3b5998;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -132,13 +133,13 @@
         }
 
         .dashboard-card button:hover {
-            background-color: #388E3C;
+            background-color: #2e4874;
         }
 
         footer {
             text-align: center;
             padding: 15px;
-            background-color: #4CAF50;
+            background-color: #3b5998;
             color: white;
             margin-top: 40px;
         }
@@ -149,7 +150,7 @@
         }
 
         .access-records button {
-            background-color: #4CAF50;
+            background-color: #3b5998;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
@@ -159,7 +160,7 @@
         }
 
         .access-records button:hover {
-            background-color: #388E3C;
+            background-color: #2e4874;
         }
     </style>
 </head>
@@ -175,17 +176,18 @@
     </nav>
 
     <!-- Header -->
-    <header>
-        <h1>
-            Waste Management Dashboard
-            <span class="admin-badge">
-                <i class="fas fa-user"></i> Employee
-            </span>
-        </h1>
-    </header>
+<header>
+  <h1>
+    Waste Management Dashboard
+    <span class="admin-badge">
+      <i class="fas fa-user-shield"></i> Admin
+    </span>
+  </h1>
+</header>
 
-    <!-- Main Content -->
-    <div class="container">
+
+     <!-- Main Content -->
+     <div class="container">
         <!-- User Profile Section -->
         <div class="profile-card">
             <div>First Name: <span id="loggedUserFName"></span></div>
@@ -201,31 +203,35 @@
         <!-- Dashboard Section -->
         <section id="dashboard">
             <div class="dashboard-container">
-                <!-- Schedule Waste Card -->
+                <!-- Solid Waste Card -->
                 <div class="dashboard-card">
                     <h3>Schedule Waste</h3>
                     <canvas id="solidWasteChart"></canvas>
                     <a href="wasteForm.html">
-                        <button>Add Schedule Waste Data</button>
+                        <button id="addSolidWaste">Add Schedule Waste Data</button>
                     </a>
                 </div>
 
-                <!-- Carbon Emission -->
+                <!-- Co2e Calc  -->
                 <div class="dashboard-card">
                     <h3>Carbon Emission</h3>
                     <canvas id="liquidWasteChart"></canvas>
                     <a href="Calculator.html">
-                        <button>Let's Calculate!</button>
+                        <button id="addLiquidWaste">Lets Calculate !</button>
                     </a>
                 </div>
+
+                
             </div>
         </section>
 
         <!-- Reports Section -->
         <section id="reports">
             <h2 style="text-align:center; margin: 20px 0;">Reports</h2>
-            <button id="generateReport">Generate Report</button>
-        </section>
+           <a href="generateReport.html">
+  <button id="generateReport">Generate Report</button>
+</a>
+
     </div>
 
     <!-- Footer -->
@@ -233,134 +239,28 @@
         <p>&copy; 2025 Waste Management System</p>
     </footer>
 
-    <!-- Firebase and Scripts -->
-    <script type="module" src="firebase-config.js"></script>
-    <script type="module" src="firebaseauth.js"></script>
-
-    <!-- JS for polymorphism and display -->
-    <script type="module">
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-        class User {
-            constructor(firstName, lastName, email) {
-                this.firstName = firstName;
-                this.lastName = lastName;
-                this.email = email;
-            }
-
-            displayInfo() {
-                document.getElementById('loggedUserFName').textContent = this.firstName;
-                document.getElementById('loggedUserLName').textContent = this.lastName;
-                document.getElementById('loggedUserEmail').textContent = this.email;
-            }
-        }
-
-        class Employee extends User {
-            constructor(firstName, lastName, email, department) {
-                super(firstName, lastName, email);
-                this.department = department;
-            }
-
-            displayInfo() {
-                super.displayInfo();
-                console.log(`Employee from department: ${this.department}`);
-            }
-        }
-
-        const auth = getAuth();
-        onAuthStateChanged(auth, user => {
-            if (user) {
-                // Replace these names with Firestore data if needed
-                const employee = new Employee("Ali", "Ahmad", user.email, "Recycling");
-                employee.displayInfo();
-            } else {
-                window.location.href = "login.html";
-            }
-        });
-
+    <!-- Scripts -->
+    <script type="module" src="../js/firebase-config.js"></script>
+    <script type="module" src="../js/firebaseauth.js"></script>
+    <script type="module" src="../js/homepage.js"></script>
+    <script>
+        // Function to navigate to retrievePage.html
         function navigateToRetrievePage() {
-            window.location.href = "retrievePage.html";
+            window.location.href = 'retrievePage.html';  // Navigate to the records page
         }
     </script>
-
-    <!-- Optional Charts -->
     <script type="module">
+        // Charts Initialization
         import { Chart } from 'https://cdn.jsdelivr.net/npm/chart.js';
 
         const solidCtx = document.getElementById('solidWasteChart').getContext('2d');
-        new Chart(solidCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Plastic', 'Glass', 'Metal'],
-                datasets: [{
-                    label: 'Waste in kg',
-                    data: [12, 19, 7],
-                    backgroundColor: '#81C784'
-                }]
-            }
-        });
+        new Chart(solidCtx, { /* Chart config */ });
 
         const liquidCtx = document.getElementById('liquidWasteChart').getContext('2d');
-        new Chart(liquidCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['CO2', 'CH4', 'N2O'],
-                datasets: [{
-                    label: 'Emissions',
-                    data: [65, 25, 10],
-                    backgroundColor: ['#A5D6A7', '#66BB6A', '#388E3C']
-                }]
-            }
-        });
+        new Chart(liquidCtx, { /* Chart config */ });
+
+        const carbonCtx = document.getElementById('carbonWasteChart').getContext('2d');
+        new Chart(carbonCtx, { /* Chart config */ });
     </script>
-    <script type="module">
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import { app } from "./firebase-config.js";
-
-const auth = getAuth(app);
-
-document.getElementById("logout").addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-    console.log("User signed out successfully.");
-    localStorage.removeItem("loggedInUserId"); // optional cleanup
-    window.location.href = "index.html"; // go back to login page
-  } catch (error) {
-    console.error("Logout failed:", error.message);
-    alert("Error logging out. Please try again.");
-  }
-});
-</script>
-<script type="module">
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
-import { app } from "./firebase-config.js";
-
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    const uid = user.uid;
-    try {
-      const userDoc = await getDoc(doc(db, "users", uid));
-      if (userDoc.exists()) {
-        const data = userDoc.data();
-        document.getElementById("loggedUserFName").textContent = data.firstName || "";
-        document.getElementById("loggedUserLName").textContent = data.lastName || "";
-        document.getElementById("loggedUserEmail").textContent = data.email || user.email;
-      } else {
-        console.error("User document not found");
-      }
-    } catch (err) {
-      console.error("Failed to fetch user data:", err);
-    }
-  } else {
-    // Not logged in
-    window.location.href = "index.html";
-  }
-});
-</script>
-
 </body>
 </html>
