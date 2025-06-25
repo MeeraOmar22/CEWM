@@ -181,6 +181,15 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+
+        /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #fff;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+    }
+
   </style>
 </head>
 <body>
@@ -192,6 +201,7 @@
         <li><a href="homepage.html"><i class="bx bx-home"></i> Dashboard</a></li>
         <li><a href="wasteForm.html"><i class="bx bx-plus-circle"></i> Schedule Waste</a></li>
         <li><a href="report.html" class="active"><i class="bx bx-file"></i> Reports</a></li>
+
         <li><a href="profile.html"><i class="bx bx-id-card"></i> Profile</a></li>
         <li><a href="users.html"><i class="bx bx-user"></i> Users</a></li>
         <li><a href="settings.html"><i class="bx bx-cog"></i> Settings</a></li>
@@ -207,8 +217,10 @@
     </header>
     <div class="content">
       <div class="report-wrapper">
-        <h2>Waste Submission Records</h2>
-        <div class="filter-container">
+
+        <h2>Waste Charts</h2>
+        <div class="filter-container" style="display: none;">
+
           <input type="text" id="searchText" placeholder="Search by keyword">
           <select id="filterWasteType">
             <option value="">Filter by Waste Type</option>

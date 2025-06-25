@@ -1,101 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Watermelon</title>
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.google.com/share?selection.family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="../css/style.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WMS Login</title>
+  <!-- Google Fonts & BoxIcons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <style>
+    /* Root Variables */
+    :root {
+      --primary: #3b5998;
+      --primary-light: #2e4874;
+      --bg-light: #f7f9fc;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --radius: 8px;
+      --transition: 0.3s;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      background: url('/images/background.jpg') no-repeat center center fixed;
+      background-size: cover;
+      font-family: 'Inter', sans-serif;
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .logo i { margin-right: 10px; }
+    .form-container {
+      background: var(--card-bg);
+      padding: 30px 25px;
+      border-radius: var(--radius);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      width: 100%;
+      max-width: 400px;
+      transition: transform var(--transition);
+    }
+    .form-container:hover { transform: translateY(-2px); }
+    .form-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--primary);
+    }
+    .input-group {
+      position: relative;
+      margin-bottom: 18px;
+    }
+    .input-group i {
+      position: absolute;
+      top: 50%; left: 12px;
+      transform: translateY(-50%);
+      color: var(--primary-light);
+      font-size: 1.1rem;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 15px 12px 40px;
+      font-size: 1rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: var(--radius);
+      transition: border-color var(--transition);
+    }
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    .btn {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn:hover { background: var(--primary-light); }
+    .links {
+      text-align: center;
+      margin-top: 15px;
+      font-size: 0.9rem;
+    }
+    .links p {
+      display: inline;
+      margin-right: 8px;
+    }
+    .links button {
+      background: none;
+      border: none;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .links button:hover { text-decoration: underline; }
+  </style>
 </head>
-<script type="module" src="../js/firebase-config.js"></script>
-<script type="module" src="../js/firebaseauth.js"></script>
 <body>
-    <!-- Navigation Bar -->
-    <div class="nav-container">
-        <nav>
-            <ul class="desktop-nav">
-                <li>
-                    <a href="#" class="link-logo">Watermelon</a>
-                </li>
-                <li>
-                    <a href="#">About Us</a>
-                </li>
-                <li>
-                    <a href="#">Media Hub</a>
-                </li>
-                <li>
-                    <a href="#">Customer Care</a>
-                </li>
-                <li>
-                    <a href="#">Contact Us</a>
-                </li>
-            </ul>
-        </nav>
-    </div>
+  <div class="logo"><i class="bx bx-recycle"></i> WMS Admin</div>
 
-    <!-- Sign-Up Container -->
-    <div class="container" id="signup" style="display: none;">
-        <h1 class="form-title">Register</h1>
-        <form id="signUpForm" action="">
-            <div id="signUpMessage" class="messageDiv" style="display: none;"></div>
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" id="fName" placeholder="First Name" required>
-                <label for="fName">First Name</label>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" id="lName" placeholder="Last Name" required>
-                <label for="lName">Last Name</label>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="rEmail" placeholder="Email" required>
-                <label for="rEmail">Email</label>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="rPassword" placeholder="Password" required>
-                <label for="rPassword">Password</label>
-            </div>
-            <button class="btn" id="submitSignUp" type="button">Sign Up</button>
-        </form>
+  <!-- Sign-In Container -->
+  <div class="form-container" id="signIn">
+    <h2 class="form-title">Sign In</h2>
+    <form id="signInForm">
+      <div id="signInMessage" class="messageDiv" style="display:none;"></div>
+      <div class="input-group">
+        <i class="bx bx-envelope"></i>
+        <input type="email" id="email" placeholder="Email" required>
+      </div>
+      <div class="input-group">
+        <i class="bx bx-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+      </div>
+      <!-- <p style="text-align:right; margin-bottom:15px;"><a href="#" style="color:var(--primary); font-size:0.9rem;">Recover Password</a></p> -->
+      <button type="submit" class="btn" id="submitSignIn">Sign In</button>
+      <div class="links">
+        <p>Don't have an account?</p>
+        <button type="button" id="showSignUp">Sign Up</button>
+      </div>
+    </form>
+  </div>
 
-        <div class="links">
-            <p>Already Have Account?</p>
-            <button id="signInButton">Sign In</button>
-        </div>
-    </div>
+  <!-- Sign-Up Container -->
+  <div class="form-container" id="signUp" style="display:none; margin-top:20px;">
+    <h2 class="form-title">Register</h2>
+    <form id="signUpForm">
+      <div id="signUpMessage" class="messageDiv" style="display:none;"></div>
+      <div class="input-group">
+        <i class="bx bx-user"></i>
+        <input type="text" id="fName" placeholder="First Name" required>
+      </div>
+      <div class="input-group">
+        <i class="bx bx-user"></i>
+        <input type="text" id="lName" placeholder="Last Name" required>
+      </div>
+      <div class="input-group">
+        <i class="bx bx-envelope"></i>
+        <input type="email" id="rEmail" placeholder="Email" required>
+      </div>
+      <div class="input-group">
+        <i class="bx bx-lock"></i>
+        <input type="password" id="rPassword" placeholder="Password" required>
+      </div>
+      <button type="button" class="btn" id="submitSignUp">Sign Up</button>
+      <div class="links">
+        <p>Already have an account?</p>
+        <button type="button" id="showSignIn">Sign In</button>
+      </div>
+    </form>
+  </div>
 
-    <!-- Sign-In Container -->
-    <div class="container" id="signIn">
-        <h1 class="form-title">Sign In</h1>
-        <form id="signInForm" action="">
-            <div id="signInMessage" class="messageDiv" style="display: none;"></div>
-            <div class="input-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="email" placeholder="Email" required>
-                <label for="email">Email</label>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="password" placeholder="Password" required>
-                <label for="password">Password</label>
-            </div>
-            <p class="recover">
-                <a href="#">Recover Password</a>
-            </p>
-            <button class="btn" id="submitSignIn" type="submit">Sign In</button>
-        </form>
-        <div class="links">
-            <p>Don't have an account yet?</p>
-            <button id="signUpButton">Sign Up</button>
-        </div>
-    </div>
+  <!-- Firebase & Auth Scripts -->
+  <script type="module" src="../js/firebase-config.js"></script>
+  <script type="module" src="../js/firebaseauth.js"></script>
 
-    <script src="../js/manageprofile.js"></script>
+  <!-- Toggle Forms -->
+  <script>
+    const signInDiv = document.getElementById('signIn');
+    const signUpDiv = document.getElementById('signUp');
+    document.getElementById('showSignUp').onclick = () => { signInDiv.style.display = 'none'; signUpDiv.style.display = 'block'; };
+    document.getElementById('showSignIn').onclick = () => { signUpDiv.style.display = 'none'; signInDiv.style.display = 'block'; };
+  </script>
 </body>
 </html>
