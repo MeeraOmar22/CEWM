@@ -1,10 +1,11 @@
 console.log("firebaseauth.js script loaded");
 
 import { auth, db } from "./firebase-config.js";
-import { 
-  createUserWithEmailAndPassword, 
-  updateProfile, 
-  signInWithEmailAndPassword 
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+  signOut
 } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
 import { 
   setDoc, 
@@ -102,6 +103,19 @@ document.addEventListener("DOMContentLoaded", () => {
           ? "Incorrect Email or Password"
           : "Account does not Exist";
         showMessage(message, "signInMessage");
+      }
+    });
+  }
+
+  const logoutBtn = document.getElementById("logout");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        localStorage.removeItem("loggedInUserId");
+        window.location.href = "index.html";
+      } catch (err) {
+        console.error("Error signing out:", err);
       }
     });
   }

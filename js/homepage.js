@@ -34,15 +34,3 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// Logout functionality
-const logoutButton = document.getElementById('logout');
-logoutButton.addEventListener('click', () => {
-  signOut(auth)
-    .then(() => {
-      localStorage.removeItem('loggedInUserId'); // Clear stored UID on logout
-      window.location.href = "index.html"; // Redirect to login page after logout
-    })
-    .catch((error) => {
-      console.error('Error signing out:', error);
-    });
-});
