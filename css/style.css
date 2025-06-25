@@ -10,7 +10,7 @@ body {
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  background: url(palm.jpg) no-repeat center center / cover;
+  background: url('../images/palm.jpg') no-repeat center center / cover;
   font-family: "Inter", sans-serif;
   font-weight: 300;
   overflow-y: scroll;
