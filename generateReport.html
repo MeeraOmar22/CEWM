@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-matrix@1.3.0/dist/chartjs-chart-matrix.min.js"></script>
+    <title>Waste Data Retrieval</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #3b5998;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .filter-container {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-container input, .filter-container select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .filter-container input[type="text"] {
+            flex: 1;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #3b5998;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2e448a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table thead {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-buttons button {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+
+        .loader {
+            display: none;
+            margin: 0 auto;
+            border: 6px solid #f3f3f3;
+            border-top: 6px solid #3b5998;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+
+        tr.condition-flawed {
+            background-color: rgba(255, 99, 71, 0.15) !important;
+        }
+
+        tr.condition-reusable {
+            background-color: rgba(60, 179, 113, 0.15) !important;
+        }
+
+    </style>
+</head>
+<body>
+    <a href="homepage.html" style="
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        background-color: #3b5998;
+        color: white;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+    ">⏪ Return to Homepage</a>
+
+    <header>
+        <h1>Waste Data Dashboard</h1>
+    </header>
+    <div class="container">
+        <h2>Waste Submission Records</h2>
+        <div class="filter-container">
+            <input type="text" id="searchText" placeholder="Search by keyword">
+            <select id="filterWasteType">
+                <option value="">Filter by Waste Type</option>
+                <option value="Palm Oil">Palm Oil / Edible Oil</option>
+                <option value="Non-Ferrous Metals">Non-Ferrous Metals</option>
+                <option value="Rice">Rice</option>
+                <option value="Cocoa">Cocoa</option>
+                <option value="Fertilizer">Fertilizer</option>
+                <option value="Cement">Cement</option>
+                <option value="Offshore IMR">Offshore IMR Waste</option>
+            </select>
+            <select id="filterCondition">
+                <option value="">Filter by Condition</option>
+                <option value="Reusable">Reusable</option>
+                <option value="Flawed">Flawed</option>
+            </select>
+            <button onclick="applyFilters()">Apply Filters</button>
+        </div>
+        <div id="loading" class="loader"></div>
+        
+        <!-- This is for summary -->
+        <div class="summary-cards">
+            <div>Total Submissions: <span id="total-submissions">0</span></div>
+            <div>Total Weight: <span id="total-weight">0 kg</span></div>
+            <div>Top Waste Type: <span id="top-type">-</span></div>
+        </div>
+        <canvas id="wasteChart" width="400" height="150"></canvas>
+
+        <!-- This is untuk waste proportion -->
+        <h3>Waste Type Distribution</h3>
+        <canvas id="wastePieChart" width="250" height="250" style="max-width: 400px; margin: auto;"></canvas>
+
+        <!-- Trend over Time -->
+         <h3>Waste Weight Over Time</h3>
+        <canvas id="wasteLineChart" width="600" height="300"></canvas>
+
+       
+
+        <table>
+            <!-- <thead>
+                <tr>
+                    <th>Waste Type</th>
+                    <th>Condition</th>
+                    <th>Weight (kg)</th>
+                    <th>Storage Location</th>
+                    <th>Date of Submission</th>
+                    <th>Comments</th>
+                    <th>Actions</th>
+                </tr>
+            </thead> -->
+            <tbody id="wasteFormsTableBody" style="display: none;">
+                <!-- Rows will be populated dynamically -->
+           
+                <!-- <tr data-id="doc">
+                    <td contenteditable="true" data-field="wasteType">Palm Oil</td>
+                    <td contenteditable="true" data-field="wasteCondition">Reusable</td>
+                    <td contenteditable="true" data-field="wasteWeight">200</td>
+                    <td contenteditable="true" data-field="storageLocation">Warehouse A</td>
+                    <td contenteditable="true" data-field="dateOfSubmission">2025-01-21</td>
+                    <td contenteditable="true" data-field="additionalComments">Good Condition</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button onclick="updateRow(this)">Update</button>
+                            <button onclick="deleteRow(this)">Delete</button>
+                        </div>
+                    </td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
+    <script type="module" src="retrievePage.js"></script>
+</body>
+</html>

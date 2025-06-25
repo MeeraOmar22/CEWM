@@ -1,0 +1,197 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  background: url(palm.jpg) no-repeat center center / cover;
+  font-family: "Inter", sans-serif;
+  font-weight: 300;
+  overflow-y: scroll;
+}
+
+/* Navigation Bar */
+.nav-container {
+  background: rgba(0, 0, 0, 0.8); /* Fixing background to properly show */
+  height: 44px;
+  z-index: 300;
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+}
+
+.nav-container nav {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 8px;
+  height: 100%;
+}
+
+nav .desktop-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  list-style: none;
+}
+
+nav .desktop-nav li a {
+  color: #fff; /* Ensure the text is visible */
+  text-decoration: none;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: opacity 400ms;
+}
+
+nav .desktop-nav li a:hover {
+  opacity: 1;
+}
+
+/* Form Container */
+.container {
+  background: #fff;
+  width: 350px;
+  padding: 1.5rem;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.9);
+}
+
+/* Input Fields */
+input {
+  color: inherit;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #757575;
+  padding-left: 1.5rem;
+  font-size: 15px;
+  box-shadow: none; /* Fix unintended line issue */
+}
+
+.input-group {
+  padding: 1% 0;
+  position: relative;
+}
+
+.input-group i {
+  position: absolute;
+  color: black;
+}
+
+input:focus {
+  outline: none; /* Ensure no border outline appears */
+  border-bottom: 2px solid hsl(327, 90%, 28%);
+}
+
+input::placeholder {
+  color: transparent;
+}
+
+label {
+  color: #757575;
+  position: relative;
+  left: 1.2em;
+  top: -1.3em;
+  transition: 0.3s ease all;
+}
+
+input:focus ~ label,
+input:not(:placeholder-shown) ~ label {
+  top: -3em;
+  color: hsl(327, 90%, 28%);
+  font-size: 15px;
+}
+
+/* Recover Link */
+.recover {
+  text-align: right;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.recover a {
+  text-decoration: none;
+  color: rgb(125, 125, 235);
+}
+
+.recover a:hover {
+  color: blue;
+  text-decoration: underline;
+}
+
+/* Buttons */
+button {
+  font-size: 1.1rem;
+  padding: 8px 0;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+  width: 100%;
+  background: rgb(125, 125, 235);
+  color: white;
+  cursor: pointer;
+  transition: 0.9s;
+}
+
+button:hover {
+  background: #07001f;
+}
+
+/* Additional Fixes */
+.links {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 4rem;
+  margin-top: 0.9rem;
+  font-weight: bold;
+}
+
+#signUpButton, #signInButton {
+  color: rgb(125, 125, 235);
+  border: none;
+  background-color: transparent;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+#signUpButton:hover, #signInButton:hover {
+  text-decoration: underline;
+  color: blue;
+}
+
+.messageDiv {
+  background-color: hsl(327, 90%, 28%);
+  color: white;
+  padding: 10px 20px;
+  margin: 10px;
+  border-radius: 5px;
+  font-size: 1rem;
+  opacity: 0;
+  animation: fadeOut 7s forwards;
+}
+/* Admin badge styling */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 10px;       /* adjust if in header */
+  margin-right: 20px;      /* adjust if in nav */
+  background-color: #e74c3c;   /* or your brand color */
+  color: white;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.admin-badge i {
+  margin-right: 4px;
+  font-size: 1rem;
+}
+

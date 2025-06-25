@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Johor Port Waste Management</title>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://fonts.google.com/share?selection.family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900" rel="stylesheet">
+
+    <a href="homepage.html" class="dashboard-icon">
+        <i class="bx bx-home"></i>
+        Dashboard
+    </a>
+    <style>
+
+        h1{
+
+            font-family: 'Inter', sans-serif;
+            font-size:2.5rem;
+            font-weight: 800;
+            color: #333;
+            text-align: center;
+        }
+
+        body {
+            
+             display: flex;
+             justify-content: center;
+             align-items: center;
+             min-height: 100vh;
+             background: url(solidwaste.jpg) no-repeat;
+             background-size: cover;
+             background-position: center;
+        }
+
+        .wrapper{
+            width: 420px;
+            background: transparent;
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 2px solid rgba (255, 255 , 255, .2);
+            border-radius: 12px;
+            padding: 30px 40px;
+            justify-content: center;
+            align-items: center;
+            
+        }
+
+        .wrapper h1{
+
+            font-size: 36px;
+            text-align:  center;
+        }
+
+        .input-box input{
+            width: 100%;
+            height: 100%;
+            background: trasnparent;
+            border:none;
+            outline:none;
+            border: 2px solid rgba(255, 255, 255, .2);
+            border-radius: 40px;
+        }
+
+
+        label {
+            display: inline-block;
+            font-size: 16px;
+            font-family: Inter, sans-serif;
+            width: 160px;
+        }
+
+        input,
+        select {
+            width: 100%; /* Make it more responsive */
+            height: 40px; /* Adjust height for visibility */
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            font-weight: bolder;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px; /* Slightly less rounded */
+            padding: 5px 10px;
+            background-color: white; /* Ensure background is white for options */
+            color: black; /* Make text visible */
+            appearance: none;
+        }
+
+        button {
+            height: 40px;
+            width: 100px;
+            font-size: 14px;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .custom-radio {
+            position: relative;
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid #007BFF; /* Border color */
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        /* Checked state */
+        input[type="radio"]:checked + .custom-radio {
+            background-color: #007BFF; /* Background color when checked */
+        }
+
+        /* Inner circle for checked state */
+        .custom-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px; /* Inner circle size */
+            height: 12px; /* Inner circle size */
+            border-radius: 50%;
+            background-color: white; /* Inner circle color */
+            transform: translate(-50%, -50%);
+            opacity: 0; /* Hide initially */
+        }
+
+        /* Show inner circle when checked */
+        input[type="radio"]:checked + .custom-radio::after {
+            opacity: 1; /* Show inner circle when checked */
+        }
+        .dashboard-icon {
+            position: fixed; /* Fixed to always stay in place */
+            top: 50%; /* Center vertically */
+            left: 20px; /* Align to the left */
+            transform: translateY(-50%); /* Center adjust */
+            font-size: 24px; /* Icon size */
+            color: #ffffff; /* Icon and text color */
+            text-decoration: none; /* No underline */
+            background: #007BFF; /* Background color */
+            padding: 15px 20px; /* Padding for clickable area */
+            border-radius: 12px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Shadow for visibility */
+            display: flex; /* Align icon and text */
+            align-items: center; /* Center items vertically */
+            gap: 10px; /* Space between icon and text */
+            font-family: 'Inter', sans-serif; /* Consistent font */
+            font-weight: bold; /* Bold text */
+        }
+
+        .dashboard-icon:hover {
+            background: #0056b3; /* Darker background on hover */
+            color: #ffffff; /* Keep text white */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5); /* Enhanced shadow */
+        }
+
+        .dashboard-icon i {
+            font-size: 32px; /* Icon size */
+        }
+    </style>
+</head>
+<script type="module" src="firebase-config.js"></script>
+<script type="module" src="firebaseauth.js"></script>
+<script type="module" src="wasteForm.js"></script>
+<body>
+    <div class="wrapper">
+    <h1>Schedule Waste Management</h1>
+    <div class="input-box">
+        
+
+    
+    
+    <form id="wasteForm">
+
+
+        <label>Waste Type</label>
+        <select id="TypeInp">
+            <option value=""disabled selected>Select Waste Type</option>
+            <option value="Palm Oil">Palm Oil / Edible Oil</option>
+            <option value="Non-Ferrous Metals">Non-Ferrous Metals</option>
+            <option value="Rice">Rice</option>
+            <option value="Cocoa">Cocoa</option>
+            <option value="Fertilizer">Fertilizer</option>
+            <option value="Cement">Cement</option>
+            <option value="Offshore IMR">Offshore IMR Waste</option>
+        </select>
+        <br><br>
+
+        <label>Waste Condition</label>
+        <input type="radio" id="Reusable" name="condition" value="Reusable">
+        <label for ="Reusable" class="custom-radio"></label> Reusable
+        </label>
+        <input type="radio" id="Flawed" name="condition" value="Flawed">
+        <label for="Flawed" class="custom-radio"></label> Flawed<br><br>
+
+        <label>Waste Weight (in kg)</label><br><br>
+        <input type="number" id="WeightInp" placeholder="Enter weight in kg" min="1" step="0.01">
+        <br><br>
+
+        <label>Storage Location</label>
+        <select id="LocationInp">
+        <option value=""disabled selected>Select Storage Location</option>
+            <option value="Palm Oil Terminal">Palm Oil Terminal</option>
+            <option value="Metal Processing Unit">Metal Processing Unit</option>
+            <option value="Rice Warehouse">Rice Warehouse</option>
+            <option value="Cocoa Warehouse">Cocoa Warehouse</option>
+            <option value="Fertilizer">Fertilizer</option>
+            <option value="Port Terminal">Port Terminal</option>
+            <option value="IMR Workshop">IMR Workshop</option>
+        </select>
+        <br><br></br>
+
+        <label>Date of Submission</label>
+        <input type="date" id="DateInp">
+        <br><br>
+
+        <label>Additional Comments</label><br>
+        <textarea id="CommentsInp" rows="4" cols="40" placeholder="Enter additional details"></textarea>
+        <br><br>
+
+        <button type="button" id="AddBtn">Add</button>
+
+    </form>
+</body>
+</html>
