@@ -1,226 +1,318 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Johor Port Waste Management</title>
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link href="https://fonts.google.com/share?selection.family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Schedule Waste Management</title>
+  <!-- Google Fonts & Boxicons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
-    <a href="homepage.html" class="dashboard-icon">
-        <i class="bx bx-home"></i>
-        Dashboard
-    </a>
-    <style>
+  <style>
+    /* Root Variables */
+    :root {
+      --primary: #3b5998;
+      --primary-light: #2e4874;
+      --bg-light: #f7f9fc;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --radius: 8px;
+      --transition: 0.3s;
+    }
 
-        h1{
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-            font-family: 'Inter', sans-serif;
-            font-size:2.5rem;
-            font-weight: 800;
-            color: #333;
-            text-align: center;
-        }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-color);
+      display: flex;
+      min-height: 100vh;
+    }
 
-        body {
-            
-             display: flex;
-             justify-content: center;
-             align-items: center;
-             min-height: 100vh;
-             background: url('../images/solidwaste.jpg') no-repeat;
-             background-size: cover;
-             background-position: center;
-        }
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+    .sidebar nav ul {
+      list-style: none;
+    }
+    .sidebar nav ul li {
+      margin: 1rem 0;
+    }
+    .sidebar nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      display: block;
+      padding: 10px;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+    .sidebar nav ul li a:hover,
+    .sidebar nav ul li a.active {
+      background: var(--primary-light);
+    }
 
-        .wrapper{
-            width: 420px;
-            background: transparent;
-            backdrop-filter: blur(10px);
-            color: white;
-            border: 2px solid rgba (255, 255 , 255, .2);
-            border-radius: 12px;
-            padding: 30px 40px;
-            justify-content: center;
-            align-items: center;
-            
-        }
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .wrapper h1{
+    /* Top Navbar */
+    .topbar {
+      background: #fff;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .topbar h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    .topbar a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+    .topbar a i { margin-right: 6px; font-size: 1.2rem; }
 
-            font-size: 36px;
-            text-align:  center;
-        }
+    /* Form Card */
+    .content {
+      flex: 1;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: var(--bg-light);
+    }
+    .form-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform var(--transition);
+    }
+    .form-card:hover {
+      transform: translateY(-3px);
+    }
+    .form-card h2 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: var(--primary);
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .form-group select,
+    .form-group input[type="number"],
+    .form-group input[type="date"],
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: var(--radius);
+      transition: border-color var(--transition);
+    }
+    .form-group select:focus,
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
 
-        .input-box input{
-            width: 100%;
-            height: 100%;
-            background: trasnparent;
-            border:none;
-            outline:none;
-            border: 2px solid rgba(255, 255, 255, .2);
-            border-radius: 40px;
-        }
+    /* Radio Buttons Inline */
+    .form-group .radio-group {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .radio-custom {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .radio-custom input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .radio-custom .radio-mark {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition);
+    }
+    .radio-custom .radio-mark::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .radio-custom input:checked ~ .radio-mark::after {
+      opacity: 1;
+    }
 
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-submit:hover {
+      background: var(--primary-light);
+    }
 
-        label {
-            display: inline-block;
-            font-size: 16px;
-            font-family: Inter, sans-serif;
-            width: 160px;
-        }
-
-        input,
-        select {
-            width: 100%; /* Make it more responsive */
-            height: 40px; /* Adjust height for visibility */
-            font-size: 16px;
-            font-family: 'Inter', sans-serif;
-            font-weight: bolder;
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px; /* Slightly less rounded */
-            padding: 5px 10px;
-            background-color: white; /* Ensure background is white for options */
-            color: black; /* Make text visible */
-            appearance: none;
-        }
-
-        button {
-            height: 40px;
-            width: 100px;
-            font-size: 14px;
-        }
-
-        input[type="radio"] {
-            display: none;
-        }
-
-        .custom-radio {
-            position: relative;
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 2px solid #007BFF; /* Border color */
-            margin-right: 10px;
-            cursor: pointer;
-        }
-
-        /* Checked state */
-        input[type="radio"]:checked + .custom-radio {
-            background-color: #007BFF; /* Background color when checked */
-        }
-
-        /* Inner circle for checked state */
-        .custom-radio::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 12px; /* Inner circle size */
-            height: 12px; /* Inner circle size */
-            border-radius: 50%;
-            background-color: white; /* Inner circle color */
-            transform: translate(-50%, -50%);
-            opacity: 0; /* Hide initially */
-        }
-
-        /* Show inner circle when checked */
-        input[type="radio"]:checked + .custom-radio::after {
-            opacity: 1; /* Show inner circle when checked */
-        }
-        .dashboard-icon {
-            position: fixed; /* Fixed to always stay in place */
-            top: 50%; /* Center vertically */
-            left: 20px; /* Align to the left */
-            transform: translateY(-50%); /* Center adjust */
-            font-size: 24px; /* Icon size */
-            color: #ffffff; /* Icon and text color */
-            text-decoration: none; /* No underline */
-            background: #007BFF; /* Background color */
-            padding: 15px 20px; /* Padding for clickable area */
-            border-radius: 12px; /* Rounded corners */
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Shadow for visibility */
-            display: flex; /* Align icon and text */
-            align-items: center; /* Center items vertically */
-            gap: 10px; /* Space between icon and text */
-            font-family: 'Inter', sans-serif; /* Consistent font */
-            font-weight: bold; /* Bold text */
-        }
-
-        .dashboard-icon:hover {
-            background: #0056b3; /* Darker background on hover */
-            color: #ffffff; /* Keep text white */
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.5); /* Enhanced shadow */
-        }
-
-        .dashboard-icon i {
-            font-size: 32px; /* Icon size */
-        }
-    </style>
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #fff;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+    }
+  </style>
 </head>
-<script type="module" src="../js/firebase-config.js"></script>
-<script type="module" src="../js/firebaseauth.js"></script>
-<script type="module" src="../js/wasteForm.js"></script>
 <body>
-    <div class="wrapper">
-    <h1>Schedule Waste Management</h1>
-    <div class="input-box">
-        
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo"><i class="bx bx-recycle"></i> WMS Admin</div>
+    <nav>
+      <ul>
+        <li><a href="homepage.html"><i class="bx bx-home"></i> Dashboard</a></li>
+        <li><a href="wasteForm.html" class="active"><i class="bx bx-plus-circle"></i> Schedule Waste</a></li>
+        <li><a href="reports.html"><i class="bx bx-file"></i> Reports</a></li>
+        <li><a href="users.html"><i class="bx bx-user"></i> Users</a></li>
+        <li><a href="settings.html"><i class="bx bx-cog"></i> Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-    
-    
-    <form id="wasteForm">
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Top Navbar -->
+    <header class="topbar">
+      <h1>Schedule Waste</h1>
+      <a href="homepage.html"><i class="bx bx-arrow-back"></i> Back to Dashboard</a>
+    </header>
 
+    <!-- Form Section -->
+    <div class="content">
+      <div class="form-card">
+        <h2>New Waste Entry</h2>
+        <form id="wasteForm">
+          <div class="form-group">
+            <label for="TypeInp">Waste Type</label>
+            <select id="TypeInp" required>
+              <option value="" disabled selected>Select type...</option>
+              <option value="Palm Oil">Palm Oil / Edible Oil</option>
+              <option value="Non-Ferrous Metals">Non-Ferrous Metals</option>
+              <option value="Rice">Rice</option>
+              <option value="Cocoa">Cocoa</option>
+              <option value="Fertilizer">Fertilizer</option>
+              <option value="Cement">Cement</option>
+              <option value="Offshore IMR">Offshore IMR Waste</option>
+            </select>
+          </div>
 
-        <label>Waste Type</label>
-        <select id="TypeInp">
-            <option value=""disabled selected>Select Waste Type</option>
-            <option value="Palm Oil">Palm Oil / Edible Oil</option>
-            <option value="Non-Ferrous Metals">Non-Ferrous Metals</option>
-            <option value="Rice">Rice</option>
-            <option value="Cocoa">Cocoa</option>
-            <option value="Fertilizer">Fertilizer</option>
-            <option value="Cement">Cement</option>
-            <option value="Offshore IMR">Offshore IMR Waste</option>
-        </select>
-        <br><br>
+          <div class="form-group">
+            <label>Condition</label>
+            <div class="radio-group">
+              <label class="radio-custom"><input type="radio" name="condition" value="Reusable" required><span class="radio-mark"></span> Reusable</label>
+              <label class="radio-custom"><input type="radio" name="condition" value="Flawed"><span class="radio-mark"></span> Flawed</label>
+            </div>
+          </div>
 
-        <label>Waste Condition</label>
-        <input type="radio" id="Reusable" name="condition" value="Reusable">
-        <label for ="Reusable" class="custom-radio"></label> Reusable
-        </label>
-        <input type="radio" id="Flawed" name="condition" value="Flawed">
-        <label for="Flawed" class="custom-radio"></label> Flawed<br><br>
+          <div class="form-group">
+            <label for="WeightInp">Weight (kg)</label>
+            <input type="number" id="WeightInp" placeholder="e.g., 125.50" min="0.01" step="0.01" required>
+          </div>
 
-        <label>Waste Weight (in kg)</label><br><br>
-        <input type="number" id="WeightInp" placeholder="Enter weight in kg" min="1" step="0.01">
-        <br><br>
+          <div class="form-group">
+            <label for="LocationInp">Storage Location</label>
+            <select id="LocationInp" required>
+              <option value="" disabled selected>Select location...</option>
+              <option>Palm Oil Terminal</option>
+              <option>Metal Processing Unit</option>
+              <option>Rice Warehouse</option>
+              <option>Cocoa Warehouse</option>
+              <option>Fertilizer Depot</option>
+              <option>Port Terminal</option>
+              <option>IMR Workshop</option>
+            </select>
+          </div>
 
-        <label>Storage Location</label>
-        <select id="LocationInp">
-        <option value=""disabled selected>Select Storage Location</option>
-            <option value="Palm Oil Terminal">Palm Oil Terminal</option>
-            <option value="Metal Processing Unit">Metal Processing Unit</option>
-            <option value="Rice Warehouse">Rice Warehouse</option>
-            <option value="Cocoa Warehouse">Cocoa Warehouse</option>
-            <option value="Fertilizer">Fertilizer</option>
-            <option value="Port Terminal">Port Terminal</option>
-            <option value="IMR Workshop">IMR Workshop</option>
-        </select>
-        <br><br></br>
+          <div class="form-group">
+            <label for="DateInp">Submission Date</label>
+            <input type="date" id="DateInp" required>
+          </div>
 
-        <label>Date of Submission</label>
-        <input type="date" id="DateInp">
-        <br><br>
+          <div class="form-group">
+            <label for="CommentsInp">Comments</label>
+            <textarea id="CommentsInp" rows="4" placeholder="Additional details..."></textarea>
+          </div>
 
-        <label>Additional Comments</label><br>
-        <textarea id="CommentsInp" rows="4" cols="40" placeholder="Enter additional details"></textarea>
-        <br><br>
+          <button type="submit" class="btn-submit" id="AddBtn">Add Waste</button>
+        </form>
+      </div>
+    </div>
 
-        <button type="button" id="AddBtn">Add</button>
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Waste Management System</p>
+    </footer>
+  </div>
 
-    </form>
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase-config.js"></script>
+  <script type="module" src="../js/firebaseauth.js"></script>
+  <script type="module" src="../js/wasteForm.js"></script>
 </body>
 </html>
