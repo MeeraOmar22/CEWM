@@ -75,25 +75,9 @@
       display: flex;
       flex-direction: column;
     }
-    .topbar {
-      background: #fff;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .topbar h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-    .topbar a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-    }
+    .topbar { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .topbar h1 { font-size: 2.0rem; font-weight: 600; }
+    .topbar a { color: var(--primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; }
     .topbar a i { margin-right: 6px; font-size: 1.2rem; }
 
     /* Report Container */
@@ -186,6 +170,7 @@
         <a href="homepage.html"><i class="bx bx-arrow-back"></i> Back to Dashboard</a>
         <button id="logout">Logout</button>
       </div>
+
     footer {
       text-align: center;
       padding: 15px;
@@ -216,8 +201,12 @@
   <div class="main">
     <header class="topbar">
       <h1>Reports</h1>
-      <a href="homepage.html"><i class="bx bx-arrow-back"></i> Back to Dashboard</a>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a href="homepage.html"><i class="bx bx-arrow-back"></i> Back to Dashboard</a>
+        <button id="logout">Logout</button>
+      </div>
     </header>
+    
     <div class="content">
       <div class="report-wrapper">
 

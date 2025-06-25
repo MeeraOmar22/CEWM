@@ -78,25 +78,9 @@
     }
 
     /* Top Navbar */
-    .topbar {
-      background: #fff;
-      padding: 15px 30px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .topbar h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-    }
-    .topbar a {
-      color: var(--primary);
-      text-decoration: none;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-    }
+    .topbar { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .topbar h1 { font-size: 2.0rem; font-weight: 600; }
+    .topbar a { color: var(--primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; }
     .topbar a i { margin-right: 6px; font-size: 1.2rem; }
 
     /* Form Card */
@@ -240,7 +224,7 @@
   <div class="main">
     <!-- Top Navbar -->
     <header class="topbar">
-      <h1>Schedule Waste</h1>
+      <h1>Waste Form</h1>
       <div style="display:flex;gap:10px;align-items:center;">
         <a href="homepage.html"><i class="bx bx-arrow-back"></i> Back to Dashboard</a>
         <button id="logout">Logout</button>
@@ -250,7 +234,7 @@
     <!-- Form Section -->
     <div class="content">
       <div class="form-card">
-        <h2>New Waste Entry</h2>
+        <h2>Enter Waste Details</h2>
         <form id="wasteForm">
           <div class="form-group">
             <label for="TypeInp">Waste Type</label>
