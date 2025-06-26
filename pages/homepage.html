@@ -183,6 +183,29 @@
             background: var(--primary-light);
         }
 
+        /* Recent Records Styling */
+        #recentRecordsList {
+            text-align: left;
+        }
+        #recentRecordsList .record-item {
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #recentRecordsList .record-item:last-child {
+            border-bottom: none;
+        }
+        #recentRecordsList .record-type {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        #recentRecordsList .record-weight {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
         /* Profile & Reports */
         .profile {
             background: var(--card-bg);
@@ -279,24 +302,25 @@
             <div class="card">
                 <h3>Carbon Emission</h3>
                 <canvas id="carbonWasteChart" height="100"></canvas>
-                <button onclick="window.location.href='calculator.html'">Calculate</button>
+                <button onclick="window.location.href='employeeCarbonRecords.html'">Manage Records</button>
+            </div>
+            <div class="card">
+                <h3>Recent Waste Records</h3>
+                <div class="metric" id="recentRecordsCount">0</div>
+                <div id="recentRecordsList" style="font-size: 0.9rem; margin: 10px 0; max-height: 120px; overflow-y: auto;">
+                    <!-- Dynamically populated -->
+                </div>
+                <button onclick="window.location.href='retrievePage.html'">View All</button>
             </div>
         </section>
 
-        <!-- Profile & Recent Records -->
+        <!-- Profile Section -->
         <div style="display: flex; flex-wrap: wrap; gap: 20px;">
             <div class="profile">
                 <h3>Admin Profile</h3>
                 <div>First Name: <strong id="loggedUserFName"></strong></div>
                 <div>Last Name: <strong id="loggedUserLName"></strong></div>
                 <div>Email: <strong id="loggedUserEmail"></strong></div>
-            </div>
-            <div class="profile" style="flex:1; max-width:600px;">
-                <h3>Recent Waste Records</h3>
-                <ul id="recentRecords" style="list-style:none;">
-                    <!-- Dynamically populated -->
-                </ul>
-                <button onclick="window.location.href='retrievePage.html'">View All</button>
             </div>
         </div>
 
