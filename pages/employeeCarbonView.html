@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Carbon Records - Waste Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <style>
+        /* Root Variables */
+        :root {
+            --primary: #0f371f;             /* Mint Green */
+            --primary-light: #C8E6C9;       /* Lighter Mint */
+            --bg-light: #F1FDF4;            /* Very light green background */
+            --card-bg: #FFFFFF;
+            --text-color: #2E7D32;          /* Deep Green */
+            --radius: 8px;
+            --transition: 0.3s;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #F44336;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav ul li {
+            margin: 1rem 0;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            display: block;
+            padding: 10px;
+            border-radius: var(--radius);
+            transition: background var(--transition);
+        }
+
+        .sidebar nav ul li a:hover,
+        .sidebar nav ul li a.active {
+            background: var(--primary-light);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navbar */
+        .topbar {
+            background: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .topbar h1 {
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .topbar h1 i {
+            margin-right: 10px;
+        }
+
+        /* Logout Button */
+        #logout {
+            background-color: #FFCDD2;
+            color: #B71C1C;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+
+        #logout:hover {
+            background-color: #EF9A9A;
+        }
+
+        /* Content Container */
+        .content {
+            flex: 1;
+            padding: 30px;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 20px;
+            text-align: center;
+            transition: transform var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card .metric {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        .stat-card.total .metric { color: var(--primary); }
+        .stat-card.scope1 .metric { color: var(--success); }
+        .stat-card.scope2 .metric { color: var(--warning); }
+        .stat-card.pending .metric { color: var(--danger); }
+
+        /* Controls Section */
+        .controls {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            flex: 1;
+            max-width: 300px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 2px solid #e1e1e1;
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: border-color var(--transition);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 8px 12px;
+            border: 2px solid #e1e1e1;
+            border-radius: var(--radius);
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .refresh-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background var(--transition);
+        }
+
+        .refresh-btn:hover {
+            background: var(--primary-light);
+        }
+
+        .new-record-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background var(--transition);
+        }
+
+        .new-record-btn:hover {
+            background: #45a049;
+        }
+
+        /* Records Table */
+        .records-container {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-header h2 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .records-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .records-table th,
+        .records-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .records-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: var(--text-color);
+            position: sticky;
+            top: 0;
+        }
+
+        .records-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-badge.pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-badge.draft {
+            background: #e2e3e5;
+            color: #495057;
+        }
+
+        .status-badge.rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-view {
+            background: #17a2b8;
+            color: white;
+        }
+
+        .btn-edit {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: var(--radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+            margin-top: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .records-table {
+                font-size: 0.9rem;
+            }
+            
+            .records-table th,
+            .records-table td {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo"><i class="bx bx-recycle"></i> WMS Employee</div>
+        <nav>
+            <ul>
+                <li><a href="employeeDashboard.html"><i class="bx bx-home"></i> Dashboard</a></li>
+                <li><a href="wasteFormEmployee.html"><i class="bx bx-plus-circle"></i> Waste Form</a></li>
+                <li><a href="managecarbon.html"><i class="bx bx-leaf"></i> Carbon Form</a></li>
+                <li><a href="employeeCarbonView.html" ><i class="bx bx-file-blank"></i> My Carbon Records</a></li>
+                <li><a href="reportEmployee.html"><i class="bx bx-file"></i> Reports</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Topbar -->
+        <header class="topbar">
+            <h1><i class="bx bx-leaf"></i> My Carbon Emission Records</h1>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button id="logout">Logout</button>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content">
+            <!-- Statistics Overview -->
+            <section class="stats-grid">
+                <div class="stat-card total">
+                    <div class="metric" id="totalRecords">-</div>
+                    <div class="label">Total Submissions</div>
+                </div>
+                <div class="stat-card scope1">
+                    <div class="metric" id="totalScope1">- kg</div>
+                    <div class="label">Total Scope 1</div>
+                </div>
+                <div class="stat-card scope2">
+                    <div class="metric" id="totalScope2">- kg</div>
+                    <div class="label">Total Scope 2</div>
+                </div>
+                <div class="stat-card pending">
+                    <div class="metric" id="pendingRecords">-</div>
+                    <div class="label">Pending Review</div>
+                </div>
+            </section>
+
+            <!-- Controls -->
+            <section class="controls">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search by date or report type...">
+                    <i class="bx bx-search"></i>
+                </div>
+                <div class="filter-group">
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="draft">Draft</option>
+                        <option value="pending">Pending</option>
+                        <option value="approved">Approved</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                    <select id="dateFilter" class="filter-select">
+                        <option value="">All Time</option>
+                        <option value="today">Today</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                        <option value="quarter">This Quarter</option>
+                    </select>
+                    <button class="refresh-btn" onclick="loadMyCarbonRecords()">
+                        <i class="bx bx-refresh"></i> Refresh
+                    </button>
+                    <button class="new-record-btn" onclick="window.location.href='managecarbon.html'">
+                        <i class="bx bx-plus"></i> New Record
+                    </button>
+                </div>
+            </section>
+
+            <!-- Records Table -->
+            <section class="records-container">
+                <div class="table-header">
+                    <h2><i class="bx bx-data"></i> My Carbon Emission Records</h2>
+                    <span id="recordCount">Loading...</span>
+                </div>
+                
+                <div id="tableContainer">
+                    <table class="records-table">
+                        <thead>
+                            <tr>
+                                <th>Report ID</th>
+                                <th>Date</th>
+                                <th>Report Type</th>
+                                <th>Scope 1 (kgCO2e)</th>
+                                <th>Scope 2 (kgCO2e)</th>
+                                <th>Total (kgCO2e)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recordsTableBody">
+                            <!-- Records will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Waste Management System | Employee Panel</p>
+        </footer>
+    </div>
+
+    <!-- View Record Modal -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="bx bx-file-blank"></i> Carbon Report Details</h2>
+                <button class="close" onclick="closeModal('viewModal')">&times;</button>
+            </div>
+            <div id="recordDetails">
+                <!-- Record details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase and Scripts -->
+    <script type="module">
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
+        import { getFirestore, collection, query, getDocs, where, orderBy } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { app } from "../js/firebase-config.js";
+
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let allRecords = [];
+        let filteredRecords = [];
+        let currentUser = null;
+
+        // Authentication
+        document.getElementById("logout").addEventListener("click", async () => {
+            try {
+                await signOut(auth);
+                localStorage.removeItem("loggedInUserId");
+                window.location.href = "index.html";
+            } catch (error) {
+                console.error("Logout failed:", error.message);
+                alert("Error logging out. Please try again.");
+            }
+        });
+
+        // Event listeners setup
+        function setupEventListeners() {
+            const searchInput = document.getElementById("searchInput");
+            const statusFilter = document.getElementById("statusFilter");
+            const dateFilter = document.getElementById("dateFilter");
+
+            if (searchInput) searchInput.addEventListener("input", applyFilters);
+            if (statusFilter) statusFilter.addEventListener("change", applyFilters);
+            if (dateFilter) dateFilter.addEventListener("change", applyFilters);
+        }
+
+        // Initialize when DOM is ready
+        function initializePage() {
+            setupEventListeners();
+            if (currentUser) {
+                loadMyCarbonRecords();
+            }
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                // Wait for DOM to be ready
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initializePage);
+                } else {
+                    initializePage();
+                }
+            } else {
+                window.location.href = "index.html";
+            }
+        });
+
+        // Load only current user's carbon records from Firestore
+        async function loadMyCarbonRecords() {
+            try {
+                showLoading();
+                console.log("Loading my carbon records...");
+
+                if (!currentUser) {
+                    console.error("No authenticated user");
+                    showError("Please log in to view your records.");
+                    return;
+                }
+
+                // Query carbon reports for current user only (without orderBy to avoid composite index requirement)
+                const q = query(
+                    collection(db, "carbonReports"), 
+                    where("userEmail", "==", currentUser.email)
+                );
+                const querySnapshot = await getDocs(q);
+
+                allRecords = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    allRecords.push({
+                        id: doc.id,
+                        ...data,
+                        reportDate: data.reportDate || new Date().toISOString().split('T')[0],
+                        status: data.status || 'draft'
+                    });
+                });
+
+                // Sort records by creation date in JavaScript (newest first)
+                allRecords.sort((a, b) => {
+                    const dateA = a.createdAt ? new Date(a.createdAt.seconds * 1000) : new Date(a.reportDate);
+                    const dateB = b.createdAt ? new Date(b.createdAt.seconds * 1000) : new Date(b.reportDate);
+                    return dateB - dateA;
+                });
+
+                console.log(`Loaded ${allRecords.length} of my carbon records`);
+                updateStatistics();
+                applyFilters();
+                
+            } catch (error) {
+                console.error("Error loading carbon records:", error);
+                showError("Failed to load your carbon records. Please try again.");
+            }
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const totalRecords = allRecords.length;
+            const totalScope1 = allRecords.reduce((sum, record) => sum + (record.summary?.scope1Total || 0), 0);
+            const totalScope2 = allRecords.reduce((sum, record) => sum + (record.summary?.scope2Total || 0), 0);
+            const pendingRecords = allRecords.filter(record => record.status === 'pending').length;
+
+            const totalRecordsEl = document.getElementById("totalRecords");
+            const totalScope1El = document.getElementById("totalScope1");
+            const totalScope2El = document.getElementById("totalScope2");
+            const pendingRecordsEl = document.getElementById("pendingRecords");
+
+            if (totalRecordsEl) totalRecordsEl.textContent = totalRecords;
+            if (totalScope1El) totalScope1El.textContent = totalScope1.toFixed(2);
+            if (totalScope2El) totalScope2El.textContent = totalScope2.toFixed(2);
+            if (pendingRecordsEl) pendingRecordsEl.textContent = pendingRecords;
+        }
+
+        // Apply filters and search
+        function applyFilters() {
+            const searchTerm = document.getElementById("searchInput").value.toLowerCase();
+            const statusFilter = document.getElementById("statusFilter").value;
+            const dateFilter = document.getElementById("dateFilter").value;
+
+            filteredRecords = allRecords.filter(record => {
+                // Search filter
+                const matchesSearch = !searchTerm || 
+                    record.reportDate.toLowerCase().includes(searchTerm) ||
+                    (record.reportType && record.reportType.toLowerCase().includes(searchTerm)) ||
+                    (record.reportId && record.reportId.toLowerCase().includes(searchTerm));
+
+                // Status filter
+                const matchesStatus = !statusFilter || record.status === statusFilter;
+
+                // Date filter
+                let matchesDate = true;
+                if (dateFilter) {
+                    const recordDate = new Date(record.reportDate);
+                    const now = new Date();
+                    
+                    switch (dateFilter) {
+                        case 'today':
+                            matchesDate = recordDate.toDateString() === now.toDateString();
+                            break;
+                        case 'week':
+                            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                            matchesDate = recordDate >= weekAgo;
+                            break;
+                        case 'month':
+                            matchesDate = recordDate.getMonth() === now.getMonth() && 
+                                         recordDate.getFullYear() === now.getFullYear();
+                            break;
+                        case 'quarter':
+                            const quarter = Math.floor(now.getMonth() / 3);
+                            const recordQuarter = Math.floor(recordDate.getMonth() / 3);
+                            matchesDate = recordQuarter === quarter && 
+                                         recordDate.getFullYear() === now.getFullYear();
+                            break;
+                    }
+                }
+
+                return matchesSearch && matchesStatus && matchesDate;
+            });
+
+            displayRecords();
+        }
+
+        // Display records in table
+        function displayRecords() {
+            const tbody = document.getElementById("recordsTableBody");
+            const recordCount = document.getElementById("recordCount");
+            
+            // Check if elements exist
+            if (!tbody) {
+                console.error("Table body element not found");
+                return;
+            }
+            if (!recordCount) {
+                console.error("Record count element not found");
+                return;
+            }
+            
+            recordCount.textContent = `${filteredRecords.length} records`;
+
+            if (filteredRecords.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <i class="bx bx-data"></i>
+                            <p>No carbon records found. <a href="managecarbon.html" style="color: var(--primary);">Create your first record</a></p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = filteredRecords.map(record => `
+                <tr>
+                    <td>${record.reportId || 'N/A'}</td>
+                    <td>${formatDate(record.reportDate)}</td>
+                    <td>${record.reportType || 'General'}</td>
+                    <td>${(record.summary?.scope1Total || 0).toFixed(2)}</td>
+                    <td>${(record.summary?.scope2Total || 0).toFixed(2)}</td>
+                    <td><strong>${(record.summary?.totalEmissions || 0).toFixed(2)}</strong></td>
+                    <td><span class="status-badge ${record.status}">${record.status}</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-view" onclick="viewRecord('${record.id}')">
+                                <i class="bx bx-show"></i> View
+                            </button>
+                            ${record.status === 'draft' ? `
+                                <button class="btn btn-edit" onclick="editRecord('${record.id}')">
+                                    <i class="bx bx-edit"></i> Edit
+                                </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // View record details
+        window.viewRecord = function(recordId) {
+            const record = allRecords.find(r => r.id === recordId);
+            if (!record) return;
+
+            const details = document.getElementById("recordDetails");
+            details.innerHTML = `
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
+                    <div>
+                        <h4>Basic Information</h4>
+                        <p><strong>Report ID:</strong> ${record.reportId || 'N/A'}</p>
+                        <p><strong>Date:</strong> ${formatDate(record.reportDate)}</p>
+                        <p><strong>Status:</strong> <span class="status-badge ${record.status}">${record.status}</span></p>
+                        <p><strong>Created:</strong> ${record.createdAt ? new Date(record.createdAt.seconds * 1000).toLocaleDateString() : 'N/A'}</p>
+                    </div>
+                    <div>
+                        <h4>Emission Summary</h4>
+                        <p><strong>Scope 1:</strong> ${(record.summary?.scope1Total || 0).toFixed(2)} kgCO2e (${record.summary?.scope1Percentage || '0%'})</p>
+                        <p><strong>Scope 2:</strong> ${(record.summary?.scope2Total || 0).toFixed(2)} kgCO2e (${record.summary?.scope2Percentage || '0%'})</p>
+                        <p><strong>Total:</strong> ${(record.summary?.totalEmissions || 0).toFixed(2)} kgCO2e</p>
+                    </div>
+                </div>
+                
+                ${record.scope1Emissions && record.scope1Emissions.length > 0 ? `
+                    <h4>Scope 1 Emissions Details</h4>
+                    <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 8px; border: 1px solid #ddd;">Activity</th>
+                                <th style="padding: 8px; border: 1px solid #ddd;">Fuel Type</th>
+                                <th style="padding: 8px; border: 1px solid #ddd;">Amount Used</th>
+                                <th style="padding: 8px; border: 1px solid #ddd;">Emissions (kgCO2e)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${record.scope1Emissions.map(emission => `
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">${emission.activity || 'N/A'}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">${emission.fuelType}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">${emission.amountUsed} ${emission.unit}</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">${emission.emissions.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                ` : ''}
+                
+                ${record.scope2Emissions ? `
+                    <h4>Scope 2 Emissions Details</h4>
+                    <p><strong>Region:</strong> ${record.scope2Emissions.region}</p>
+                    <p><strong>Electricity Consumption:</strong> ${record.scope2Emissions.electricityConsumption} kWh</p>
+                    <p><strong>Emissions:</strong> ${record.scope2Emissions.emissions.toFixed(2)} kgCO2e</p>
+                ` : ''}
+            `;
+
+            document.getElementById("viewModal").style.display = "block";
+        };
+
+        // Edit record (redirect to carbon form with record ID)
+        window.editRecord = function(recordId) {
+            window.location.href = `managecarbon.html?edit=${recordId}`;
+        };
+
+        // Close modal
+        window.closeModal = function(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        };
+
+        // Utility functions
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function showLoading() {
+            const tbody = document.getElementById("recordsTableBody");
+            if (!tbody) {
+                console.error("Table body element not found");
+                return;
+            }
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="loading">
+                        <i class="bx bx-loader-alt"></i>
+                        <p>Loading your carbon records...</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        function showError(message) {
+            const tbody = document.getElementById("recordsTableBody");
+            if (!tbody) {
+                console.error("Table body element not found");
+                return;
+            }
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="8" class="empty-state">
+                        <i class="bx bx-error"></i>
+                        <p>${message}</p>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener("click", function(event) {
+            const modal = document.getElementById("viewModal");
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+
+        // Make loadMyCarbonRecords globally available
+        window.loadMyCarbonRecords = loadMyCarbonRecords;
+    </script>
+</body>
+</html>
