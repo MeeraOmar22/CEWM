@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Carbon Reports - Waste Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        /* Root Variables */
+        :root {
+            --primary: #0f371f;             /* Mint Green */
+            --primary-light: #C8E6C9;       /* Lighter Mint */
+            --bg-light: #F1FDF4;            /* Very light green background */
+            --card-bg: #FFFFFF;
+            --text-color: #2E7D32;          /* Deep Green */
+            --radius: 8px;
+            --transition: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav ul li {
+            margin: 1rem 0;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            display: block;
+            padding: 10px;
+            border-radius: var(--radius);
+            transition: background var(--transition);
+        }
+
+        .sidebar nav ul li a:hover,
+        .sidebar nav ul li a.active {
+            background: var(--primary-light);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navbar */
+        .topbar {
+            background: #fff;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .topbar h1 {
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .topbar h1 i {
+            margin-right: 10px;
+        }
+
+        /* Logout Button - Soft Red */
+        #logout {
+            background-color: #FFCDD2;
+            color: #B71C1C;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+
+        #logout:hover {
+            background-color: #EF9A9A;
+        }
+
+        /* Dashboard Header */
+        .content-header {
+            padding: 20px 30px;
+        }
+
+        .content-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-header h1 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        /* Cards Grid */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 20px;
+            padding: 0 30px 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 25px;
+            transition: transform var(--transition);
+            min-height: 350px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-bottom: 20px;
+            color: var(--text-color);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .card h3 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+
+        .card .chart-container {
+            height: 250px;
+            position: relative;
+        }
+
+        .card canvas {
+            max-height: 100%;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 0 30px 20px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 20px;
+            text-align: center;
+            transition: transform var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .stat-card .metric {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            padding: 20px 30px;
+            flex-wrap: wrap;
+        }
+
+        .button-action {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .button-action:hover {
+            background: var(--text-color);
+            transform: translateY(-1px);
+        }
+
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: var(--text-color);
+        }
+
+        .loading i {
+            margin-right: 10px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 15px;
+            background: #fff;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+            margin-top: auto;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .cards {
+                grid-template-columns: 1fr;
+                padding: 0 15px 15px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 0 15px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo"><i class="bx bx-recycle"></i> WMS Employee</div>
+        <nav>
+            <ul>
+                <li><a href="employeeDashboard.html"><i class="bx bx-home"></i> Dashboard</a></li>
+                <li><a href="wasteForm.html"><i class="bx bx-plus-circle"></i> Waste Form</a></li>
+                <li><a href="managecarbon.html"><i class="bx bx-leaf"></i> Carbon Form</a></li>
+                <li><a href="reportEmployee.html" class="active"><i class="bx bx-file"></i> Reports</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+        <!-- Topbar -->
+        <header class="topbar">
+            <h1><i class="bx bx-bar-chart-alt-2"></i> Carbon Emission Reports</h1>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button id="logout">Logout</button>
+            </div>
+        </header>
+
+        <!-- Dashboard Header -->
+        <section class="content-header">
+            <h1><i class="bx bx-trending-up"></i> Carbon Footprint Analytics</h1>
+        </section>
+
+        <!-- Statistics Overview -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="metric" id="totalReports">-</div>
+                <div class="label">Total Reports</div>
+            </div>
+            <div class="stat-card">
+                <div class="metric" id="totalEmissions">- kg</div>
+                <div class="label">Total Emissions</div>
+            </div>
+            <div class="stat-card">
+                <div class="metric" id="avgScope1">- kg</div>
+                <div class="label">Avg Scope 1</div>
+            </div>
+            <div class="stat-card">
+                <div class="metric" id="avgScope2">- kg</div>
+                <div class="label">Avg Scope 2</div>
+            </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <section class="action-buttons">
+            <a href="managecarbon.html" class="button-action">
+                <i class="bx bx-plus"></i> Add New Report
+            </a>
+            <button class="button-action" onclick="refreshData()">
+                <i class="bx bx-refresh"></i> Refresh Data
+            </button>
+        </section>
+
+        <!-- Charts Grid -->
+        <section class="cards">
+            <div class="card">
+                <h3><i class="bx bx-pie-chart-alt-2"></i> Scope 1 vs Scope 2 Emissions</h3>
+                <div class="chart-container">
+                    <canvas id="scopeComparisonChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3><i class="bx bx-line-chart"></i> Emissions Trend Over Time</h3>
+                <div class="chart-container">
+                    <canvas id="emissionsTrendChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="bx bx-bar-chart"></i> Fuel Type Distribution (Scope 1)</h3>
+                <div class="chart-container">
+                    <canvas id="fuelTypeChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3><i class="bx bx-map"></i> Emissions by Port Region (Scope 2)</h3>
+                <div class="chart-container">
+                    <canvas id="regionChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Waste Management System | Carbon Emissions Analytics</p>
+        </footer>
+    </div>
+
+    <!-- Firebase and Auth Scripts -->
+    <script type="module">
+        // Ensure DOM is fully loaded before starting
+        function waitForDOM() {
+            return new Promise((resolve) => {
+                if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                    resolve();
+                } else {
+                    document.addEventListener('DOMContentLoaded', resolve);
+                }
+            });
+        }
+
+        // Initialize everything after DOM is ready
+        waitForDOM().then(async () => {
+            console.log("DOM is ready, initializing Firebase...");
+            
+            // Import Firebase modules
+            const { getAuth, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js");
+            const { getFirestore, collection, query, where, getDocs, orderBy, limit } = await import("https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js");
+            const { app } = await import("../js/firebase-config.js");
+
+            const auth = getAuth(app);
+            const db = getFirestore(app);
+            let charts = {};
+
+            // Verify DOM elements exist
+            console.log("Checking if canvas elements exist...");
+            const canvasIds = ['scopeComparisonChart', 'emissionsTrendChart', 'fuelTypeChart', 'regionChart'];
+            const missingCanvases = [];
+            canvasIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    console.log(`Canvas '${id}': Found ✓`, element.tagName, element.parentElement);
+                } else {
+                    console.error(`Canvas '${id}': Missing ✗`);
+                    missingCanvases.push(id);
+                }
+            });
+
+            if (missingCanvases.length > 0) {
+                console.error("CRITICAL: Missing canvas elements:", missingCanvases);
+                console.log("All elements with 'chart' in ID:");
+                document.querySelectorAll('[id*="chart"], [id*="Chart"]').forEach(el => {
+                    console.log("Found:", el.id, el.tagName);
+                });
+            } else {
+                console.log("✅ All required canvas elements are present!");
+            }
+
+            // Logout functionality
+            const logoutBtn = document.getElementById("logout");
+            if (logoutBtn) {
+                logoutBtn.addEventListener("click", async () => {
+                    try {
+                        await signOut(auth);
+                        console.log("User signed out successfully.");
+                        localStorage.removeItem("loggedInUserId");
+                        window.location.href = "index.html";
+                    } catch (error) {
+                        console.error("Logout failed:", error.message);
+                        alert("Error logging out. Please try again.");
+                    }
+                });
+            }
+
+            // Check authentication and load data
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    console.log("User authenticated:", user.uid);
+                    
+                    // Since DOM is already ready (we're inside waitForDOM), 
+                    // just wait a moment for everything to be fully rendered
+                    setTimeout(() => {
+                        loadCarbonReportsData(user.uid);
+                    }, 200);
+                } else {
+                    console.log("User not authenticated, redirecting to login");
+                    window.location.href = "index.html";
+                }
+            });
+
+            // Function to load and process carbon reports data
+            async function loadCarbonReportsData(userId) {
+            try {
+                // Debug: Check if canvas elements exist
+                console.log("Checking canvas elements...");
+                ['scopeComparisonChart', 'emissionsTrendChart', 'fuelTypeChart', 'regionChart'].forEach(id => {
+                    const element = document.getElementById(id);
+                    console.log(`Canvas ${id}:`, element ? 'Found' : 'NOT FOUND');
+                });
+
+                showLoading();
+                console.log("Starting to load carbon reports for user:", userId);
+                
+                // First, test if we can access the collection at all
+                try {
+                    const testQuery = query(collection(db, "carbonReports"), limit(1));
+                    const testSnapshot = await getDocs(testQuery);
+                    console.log("Collection accessible, total docs found:", testSnapshot.size);
+                } catch (testError) {
+                    console.error("Cannot access carbonReports collection:", testError);
+                }
+                
+                // Now try with orderBy, if it fails, try without orderBy
+                let querySnapshot;
+                try {
+                    // Query carbon reports for the current user with ordering
+                    const q = query(
+                        collection(db, "carbonReports"),
+                        where("userId", "==", userId),
+                        orderBy("createdAt", "desc")
+                    );
+                    querySnapshot = await getDocs(q);
+                    console.log("Query with orderBy successful, docs found:", querySnapshot.size);
+                } catch (indexError) {
+                    console.log("Composite index not available, querying without orderBy:", indexError);
+                    // Fallback: query without orderBy
+                    const q = query(
+                        collection(db, "carbonReports"),
+                        where("userId", "==", userId)
+                    );
+                    querySnapshot = await getDocs(q);
+                    console.log("Query without orderBy successful, docs found:", querySnapshot.size);
+                }
+                
+                const reports = [];
+                
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    console.log("Processing document:", doc.id, data);
+                    reports.push({ 
+                        id: doc.id, 
+                        ...data,
+                        // Ensure we have a valid date for sorting
+                        createdAt: data.createdAt || new Date(),
+                        reportDate: data.reportDate || new Date().toISOString().split('T')[0]
+                    });
+                });
+
+                // Sort manually by date if we didn't use orderBy
+                reports.sort((a, b) => {
+                    const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt);
+                    const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt);
+                    return dateB - dateA; // Descending order
+                });
+
+                console.log(`Loaded ${reports.length} carbon reports for user ${userId}`);
+
+                // Process and display the data
+                processReportsData(reports);
+                createCharts(reports);
+                
+                hideLoading();
+            } catch (error) {
+                console.error("Error loading carbon reports:", error);
+                hideLoading();
+                
+                // Show a more helpful error message
+                if (error.code === 'failed-precondition') {
+                    alert("Database index is being created. Please try again in a few minutes.");
+                } else if (error.code === 'permission-denied') {
+                    alert("Permission denied. Please make sure you are logged in.");
+                } else {
+                    alert(`Error loading reports data: ${error.message}`);
+                }
+            }
+        }
+
+        // Process reports data for statistics
+        function processReportsData(reports) {
+            const totalReports = reports.length;
+            let totalEmissions = 0;
+            let totalScope1 = 0;
+            let totalScope2 = 0;
+
+            if (totalReports === 0) {
+                // Show placeholder data when no reports exist
+                document.getElementById("totalReports").textContent = "0";
+                document.getElementById("totalEmissions").textContent = "0.00";
+                document.getElementById("avgScope1").textContent = "0.00";
+                document.getElementById("avgScope2").textContent = "0.00";
+                return;
+            }
+
+            reports.forEach(report => {
+                if (report.summary) {
+                    totalEmissions += report.summary.totalEmissions || 0;
+                    totalScope1 += report.summary.scope1Total || 0;
+                    totalScope2 += report.summary.scope2Total || 0;
+                }
+            });
+
+            const avgScope1 = totalReports > 0 ? (totalScope1 / totalReports) : 0;
+            const avgScope2 = totalReports > 0 ? (totalScope2 / totalReports) : 0;
+
+            // Update statistics
+            document.getElementById("totalReports").textContent = totalReports;
+            document.getElementById("totalEmissions").textContent = totalEmissions.toFixed(2);
+            document.getElementById("avgScope1").textContent = avgScope1.toFixed(2);
+            document.getElementById("avgScope2").textContent = avgScope2.toFixed(2);
+        }
+
+        function prepareChartsForDisplay() {
+            document.querySelectorAll('.chart-container').forEach(container => {
+                // Show canvas and hide any messages
+                const canvas = container.querySelector('canvas');
+                if (canvas) {
+                    canvas.style.display = 'block';
+                }
+                
+                // Remove any existing messages
+                const existingMessage = container.querySelector('.chart-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+                
+                // Remove any loading overlays
+                const loadingOverlay = container.querySelector('.loading-overlay');
+                if (loadingOverlay) {
+                    loadingOverlay.remove();
+                }
+            });
+        }
+
+        // Create all charts
+        async function createCharts(reports) {
+                try {
+                    // Final check: ensure all canvas elements exist
+                    console.log("Final canvas check before creating charts...");
+                    const requiredCanvases = ['scopeComparisonChart', 'emissionsTrendChart', 'fuelTypeChart', 'regionChart'];
+                    const existingCanvases = [];
+                    const missingCanvases = [];
+                    
+                    requiredCanvases.forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            existingCanvases.push(id);
+                            console.log(`✓ Canvas '${id}' found:`, element);
+                        } else {
+                            missingCanvases.push(id);
+                            console.error(`✗ Canvas '${id}' NOT found`);
+                        }
+                    });
+                    
+                    if (missingCanvases.length > 0) {
+                        console.error("Missing canvas elements:", missingCanvases);
+                        console.error("Available elements with 'Chart' in ID:");
+                        document.querySelectorAll('[id*="Chart"]').forEach(el => {
+                            console.log("Found element:", el.id, el);
+                        });
+                        displayChartError();
+                        return;
+                    }
+
+                    console.log("All canvas elements found, proceeding with chart creation...");
+
+                    // Prepare charts for display (show canvas, hide messages)
+                    prepareChartsForDisplay();
+
+                    // Use Chart.js loaded from script tag
+                    console.log("Using Chart.js from global scope...");
+                    const Chart = window.Chart;
+                    console.log("Chart.js found:", Chart);
+                    
+                    if (!Chart) {
+                        throw new Error("Chart.js not loaded. Make sure the script tag is included.");
+                    }
+
+                    // Destroy existing charts
+                    Object.values(charts).forEach(chart => chart?.destroy());
+                    charts = {};
+
+                // Check if we have data to display
+                if (reports.length === 0) {
+                    displayNoDataMessage();
+                    return;
+                }
+
+                // 1. Scope 1 vs Scope 2 Pie Chart
+                createScopeComparisonChart(Chart, reports);
+                
+                // 2. Emissions Trend Line Chart
+                createEmissionsTrendChart(Chart, reports);
+                
+                // 3. Fuel Type Distribution Bar Chart
+                createFuelTypeChart(Chart, reports);
+                
+                // 4. Regional Emissions Chart
+                createRegionChart(Chart, reports);
+            } catch (error) {
+                console.error("Error creating charts:", error);
+                displayChartError();
+            }
+        }
+
+        function displayNoDataMessage() {
+            document.querySelectorAll('.chart-container').forEach(container => {
+                // Hide canvas and show message
+                const canvas = container.querySelector('canvas');
+                if (canvas) {
+                    canvas.style.display = 'none';
+                }
+                
+                // Remove any existing message
+                const existingMessage = container.querySelector('.chart-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+                
+                // Add new message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chart-message';
+                messageDiv.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; color: #666;';
+                messageDiv.innerHTML = `
+                    <i class="bx bx-data" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                    <p>No carbon reports found</p>
+                    <p style="font-size: 0.9rem;">Create your first report to see analytics</p>
+                `;
+                container.appendChild(messageDiv);
+            });
+        }
+
+        function displayChartError() {
+            document.querySelectorAll('.chart-container').forEach(container => {
+                // Hide canvas and show error
+                const canvas = container.querySelector('canvas');
+                if (canvas) {
+                    canvas.style.display = 'none';
+                }
+                
+                // Remove any existing message
+                const existingMessage = container.querySelector('.chart-message');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+                
+                // Add error message
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'chart-message';
+                messageDiv.style.cssText = 'display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; color: #f44336;';
+                messageDiv.innerHTML = `
+                    <i class="bx bx-error" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                    <p>Error loading chart</p>
+                `;
+                container.appendChild(messageDiv);
+            });
+        }
+
+        function createScopeComparisonChart(Chart, reports) {
+            try {
+                console.log("Creating scope comparison chart...");
+                
+                const canvas = document.getElementById('scopeComparisonChart');
+                if (!canvas) {
+                    console.error("Canvas element 'scopeComparisonChart' not found");
+                    const container = document.querySelector('.chart-container:first-of-type');
+                    if (container) {
+                        container.innerHTML = `
+                            <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; color: #f44336;">
+                                <i class="bx bx-error" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                                <p>Chart canvas not found</p>
+                            </div>
+                        `;
+                    }
+                    return;
+                }
+
+                let totalScope1 = 0;
+                let totalScope2 = 0;
+
+                reports.forEach(report => {
+                    if (report.summary) {
+                        totalScope1 += report.summary.scope1Total || 0;
+                        totalScope2 += report.summary.scope2Total || 0;
+                    }
+                });
+
+                console.log("Scope 1 total:", totalScope1, "Scope 2 total:", totalScope2);
+
+                const ctx = canvas.getContext('2d');
+                charts.scopeComparison = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Scope 1 (Direct)', 'Scope 2 (Indirect)'],
+                        datasets: [{
+                            data: [totalScope1, totalScope2],
+                            backgroundColor: ['#4CAF50', '#81C784'],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+                
+                console.log("Scope comparison chart created successfully");
+            } catch (error) {
+                console.error("Error creating scope comparison chart:", error);
+                const container = document.querySelector('.chart-container:first-of-type');
+                if (container) {
+                    container.innerHTML = `
+                        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; color: #f44336;">
+                            <i class="bx bx-error" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                            <p>Error creating chart</p>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function createEmissionsTrendChart(Chart, reports) {
+            try {
+                // Sort reports by date
+                const sortedReports = reports.sort((a, b) => {
+                    const dateA = new Date(a.reportDate);
+                    const dateB = new Date(b.reportDate);
+                    return dateA - dateB;
+                });
+
+                const labels = sortedReports.map(report => report.reportDate);
+                const scope1Data = sortedReports.map(report => report.summary?.scope1Total || 0);
+                const scope2Data = sortedReports.map(report => report.summary?.scope2Total || 0);
+
+                const canvas = document.getElementById('emissionsTrendChart');
+                if (!canvas) {
+                    console.error("Canvas element 'emissionsTrendChart' not found");
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                charts.emissionsTrend = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Scope 1',
+                                data: scope1Data,
+                                borderColor: '#4CAF50',
+                                backgroundColor: 'rgba(76, 175, 80, 0.1)',
+                                tension: 0.4
+                            },
+                            {
+                                label: 'Scope 2',
+                                data: scope2Data,
+                                borderColor: '#81C784',
+                                backgroundColor: 'rgba(129, 199, 132, 0.1)',
+                                tension: 0.4
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Emissions (kgCO2e)'
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error creating emissions trend chart:", error);
+            }
+        }
+
+        function createFuelTypeChart(Chart, reports) {
+            try {
+                const fuelTypeData = {};
+
+                reports.forEach(report => {
+                    if (report.scope1Emissions) {
+                        report.scope1Emissions.forEach(emission => {
+                            const fuelType = emission.fuelType || 'Unknown';
+                            fuelTypeData[fuelType] = (fuelTypeData[fuelType] || 0) + emission.emissions;
+                        });
+                    }
+                });
+
+                const labels = Object.keys(fuelTypeData);
+                const data = Object.values(fuelTypeData);
+
+                const canvas = document.getElementById('fuelTypeChart');
+                if (!canvas) {
+                    console.error("Canvas element 'fuelTypeChart' not found");
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                charts.fuelType = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Emissions (kgCO2e)',
+                            data: data,
+                            backgroundColor: [
+                                '#4CAF50', '#66BB6A', '#81C784', 
+                                '#A5D6A7', '#C8E6C9', '#E8F5E8'
+                            ]
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Emissions (kgCO2e)'
+                                }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error creating fuel type chart:", error);
+            }
+        }
+
+        function createRegionChart(Chart, reports) {
+            try {
+                const regionData = {};
+
+                reports.forEach(report => {
+                    if (report.scope2Emissions) {
+                        const region = report.scope2Emissions.region || 'Unknown';
+                        const emissions = report.scope2Emissions.emissions || 0;
+                        regionData[region] = (regionData[region] || 0) + emissions;
+                    }
+                });
+
+                const labels = Object.keys(regionData);
+                const data = Object.values(regionData);
+
+                const canvas = document.getElementById('regionChart');
+                if (!canvas) {
+                    console.error("Canvas element 'regionChart' not found");
+                    return;
+                }
+
+                const ctx = canvas.getContext('2d');
+                charts.region = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Emissions (kgCO2e)',
+                            data: data,
+                            backgroundColor: '#66BB6A'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Emissions (kgCO2e)'
+                                }
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Error creating region chart:", error);
+            }
+        }
+
+        function showLoading() {
+            console.log("Setting loading state for charts...");
+            document.querySelectorAll('.chart-container').forEach((container, index) => {
+                console.log(`Setting loading for chart container ${index}:`, container);
+                // Instead of replacing innerHTML, add a loading overlay
+                if (!container.querySelector('.loading-overlay')) {
+                    const loadingOverlay = document.createElement('div');
+                    loadingOverlay.className = 'loading-overlay';
+                    loadingOverlay.style.cssText = `
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(255, 255, 255, 0.9);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        z-index: 10;
+                    `;
+                    loadingOverlay.innerHTML = '<div class="loading"><i class="bx bx-loader-alt"></i> Loading chart data...</div>';
+                    container.appendChild(loadingOverlay);
+                }
+            });
+        }
+
+        function hideLoading() {
+            console.log("Hiding loading state for charts...");
+            document.querySelectorAll('.loading-overlay').forEach((overlay, index) => {
+                console.log(`Removing loading overlay ${index}:`, overlay);
+                overlay.remove();
+            });
+        }
+
+        // Global function to refresh data
+        window.refreshData = async function() {
+            const user = auth.currentUser;
+            if (user) {
+                await loadCarbonReportsData(user.uid);
+            }
+        };
+
+        }); // End of waitForDOM().then()
+    </script>
+</body>
+</html>
