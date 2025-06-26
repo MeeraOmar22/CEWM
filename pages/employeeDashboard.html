@@ -3,54 +3,227 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Employee Waste Dashboard</title>
+    <title>Employee Dashboard - Waste Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <style>
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to bottom, rgba(76, 175, 80, 0.8), rgba(255, 255, 255, 0.7)), 
-                url('../images/dashboard.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            color: #333;
+        /* Root Variables */
+        :root {
+            --primary: #3b5998;
+            --primary-light: #2e4874;
+            --bg-light: #f7f9fc;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --radius: 8px;
+            --transition: 0.3s;
         }
 
-        nav {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-light);
+            color: var(--text-color);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--primary);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .sidebar .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+        }
+
+        .sidebar nav ul {
+            list-style: none;
+        }
+
+        .sidebar nav ul li {
+            margin: 1rem 0;
+        }
+
+        .sidebar nav ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            display: block;
+            padding: 10px;
+            border-radius: var(--radius);
+            transition: background var(--transition);
+        }
+
+        .sidebar nav ul li a:hover,
+        .sidebar nav ul li a.active {
+            background: var(--primary-light);
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navbar */
+        .topbar {
+            background: #fff;
+            padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 30px;
-            background-color: #4CAF50;
-            color: white;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
-        nav ul {
+        .topbar .search {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 20px;
+            position: relative;
+        }
+
+        .topbar .search input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: var(--radius);
+        }
+
+        .topbar .actions {
             display: flex;
-            list-style: none;
-            margin: 0;
-            padding: 0;
+            align-items: center;
         }
 
-        nav ul li {
-            margin: 0 15px;
-        }
-
-        nav ul li a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        nav button {
-            background-color: #fff;
-            color: #4CAF50;
+        .topbar .actions .icon-btn {
+            background: none;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
+            margin-left: 15px;
+            font-size: 1.2rem;
             cursor: pointer;
-            font-weight: bold;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .topbar .actions .icon-btn .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: red;
+            color: #fff;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+        }
+
+        /* Dashboard Header */
+        .content-header {
+            padding: 20px 30px;
+        }
+
+        .content-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .content-header h1 .admin-badge {
+            background: var(--primary);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: var(--radius);
+            margin-left: 10px;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* Cards Grid */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0 30px 30px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            padding: 20px;
+            transition: transform var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .card .metric {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .card button {
+            margin-top: 15px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+
+        .card button:hover {
+            background: var(--primary-light);
+        }
+
+        /* Profile & Reports */
+        .profile {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            margin: 20px 30px;
+            max-width: 300px;
+        }
+
+        .profile div {
+            margin-bottom: 10px;
+        }
+
+        .reports {
+            padding: 20px 30px;
+        }
+
+        .reports button {
+            background: var(--primary);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: var(--radius);
+            cursor: pointer;
         }
 
         /* Logout Button */
@@ -68,185 +241,80 @@
             background-color: #c0392b;
         }
 
-        nav button:hover {
-            background-color: #e1e1e1;
-        }
-
-        header {
-            text-align: center;
-            padding: 20px;
-            background-color: #f3f4f6;
-            border-bottom: 2px solid #c8e6c9;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-            color: #4CAF50;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .profile-card {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            margin-bottom: 30px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            text-align: left;
-        }
-
-        .profile-card div {
-            margin: 10px 0;
-            font-size: 1.1rem;
-        }
-
-        .profile-card span {
-            font-weight: 600;
-        }
-
-        .dashboard-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            width: 100%;
-            max-width: 1200px;
-            margin: 20px auto;
-        }
-
-        .dashboard-card {
-            flex: 1 1 calc(30% - 20px);
-            margin: 10px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            max-width: 300px;
-        }
-
-        .dashboard-card h3 {
-            margin-bottom: 15px;
-            color: #4CAF50;
-        }
-
-        .dashboard-card button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .dashboard-card button:hover {
-            background-color: #388E3C;
-        }
-
+        /* Footer */
         footer {
             text-align: center;
             padding: 15px;
-            background-color: #4CAF50;
-            color: white;
-            margin-top: 40px;
-        }
-
-        .access-records {
-            text-align: center;
-            margin: 30px 0;
-        }
-
-        .access-records button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-        }
-
-        .access-records button:hover {
-            background-color: #388E3C;
+            background: #fff;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav>
-        <ul>
-            <li><a href="#dashboard">Dashboard</a></li>
-            <li><a href="#Form">Waste Form</a></li>
-            <li><a href="#reports">Reports</a></li>
-        </ul>
-        <button id="logout">Logout</button>
-    </nav>
-
-    <!-- Header -->
-    <header>
-        <h1>
-            Waste Management Dashboard
-            <span class="admin-badge">
-                <i class="fas fa-user"></i> Employee
-            </span>
-        </h1>
-    </header>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo"><i class="bx bx-recycle"></i> WMS Employee</div>
+        <nav>
+            <ul>
+                <li><a href="employeeDashboard.html" class="active"><i class="bx bx-home"></i> Dashboard</a></li>
+                <li><a href="wasteForm.html"><i class="bx bx-plus-circle"></i> Waste Form</a></li>
+                <li><a href="retrievePage.html"><i class="bx bx-file"></i> Reports</a></li>
+            </ul>
+        </nav>
+    </aside>
 
     <!-- Main Content -->
-    <div class="container">
-        <!-- User Profile Section -->
-        <div class="profile-card">
-            <div>First Name: <span id="loggedUserFName"></span></div>
-            <div>Last Name: <span id="loggedUserLName"></span></div>
-            <div>Email: <span id="loggedUserEmail"></span></div>
-        </div>
+    <div class="main">
+        <!-- Topbar -->
+        <header class="topbar">
+            <h1>Waste Management Dashboard</h1>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button id="logout">Logout</button>
+            </div>
+        </header>
 
-        <!-- Access Records Section -->
-        <div class="access-records">
-            <button id="accessRecordsBtn" onclick="navigateToRetrievePage()">Access Waste Records</button>
-        </div>
+        <!-- Dashboard Header -->
+        <section class="content-header"></section>
 
-        <!-- Dashboard Section -->
-        <section id="dashboard">
-            <div class="dashboard-container">
-                <!-- Schedule Waste Card -->
-                <div class="dashboard-card">
-                    <h3>Schedule Waste</h3>
-                    <canvas id="solidWasteChart"></canvas>
-                    <a href="wasteForm.html">
-                        <button>Add Schedule Waste Data</button>
-                    </a>
-                </div>
-
-                <!-- Carbon Emission -->
-                <div class="dashboard-card">
-                    <h3>Carbon Emission</h3>
-                    <canvas id="liquidWasteChart"></canvas>
-                    <a href="managecarbon.html">
-                        <button>Let's Calculate!</button>
-                    </a>
-                </div>
+        <!-- Dashboard Cards -->
+        <section id="dashboard" class="cards">
+            <div class="card">
+                <h3>Schedule Waste</h3>
+                <canvas id="solidWasteChart"></canvas>
+                <button onclick="window.location.href='wasteForm.html'">Add Schedule Waste Data</button>
+            </div>
+            <div class="card">
+                <h3>Carbon Emission</h3>
+                <canvas id="liquidWasteChart"></canvas>
+                <button onclick="window.location.href='managecarbon.html'">Let's Calculate!</button>
+            </div>
+            <div class="card">
+                <h3>Access Waste Records</h3>
+                <button onclick="navigateToRetrievePage()">View Records</button>
             </div>
         </section>
 
-        <!-- Reports Section -->
-        <section id="reports">
-            <h2 style="text-align:center; margin: 20px 0;">Reports</h2>
-            <button id="generateReport">Generate Report</button>
-        </section>
-    </div>
+        <!-- Profile -->
+        <div style="display:flex; flex-wrap:wrap; gap:20px;">
+            <div class="profile">
+                <h3>Employee Profile</h3>
+                <div>First Name: <strong id="loggedUserFName"></strong></div>
+                <div>Last Name: <strong id="loggedUserLName"></strong></div>
+                <div>Email: <strong id="loggedUserEmail"></strong></div>
+            </div>
+        </div>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 Waste Management System</p>
-    </footer>
+        <!-- Reports Section -->
+        <section id="reports" class="reports">
+            <h2>Generate Reports</h2>
+            <button id="generateReport" onclick="window.location.href='generateReport.html'">Generate Report</button>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 Waste Management System</p>
+        </footer>
+    </div>
 
     <!-- Firebase and Scripts -->
     <script type="module" src="../js/firebase-config.js"></script>
