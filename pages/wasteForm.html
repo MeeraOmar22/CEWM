@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin · Schedule Waste Management</title>
+  <!-- Google Fonts & Boxicons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <style>
+    /* Root Variables */
+    :root {
+      --primary: #3b5998;
+      --primary-light: #2e4874;
+      --bg-light: #f7f9fc;
+      --card-bg: #ffffff;
+      --text-color: #333;
+      --radius: 8px;
+      --transition: 0.3s;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-color);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: var(--primary);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+    .sidebar nav ul {
+      list-style: none;
+    }
+    .sidebar nav ul li {
+      margin: 1rem 0;
+    }
+    .sidebar nav ul li a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      display: block;
+      padding: 10px;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+    .sidebar nav ul li a:hover,
+    .sidebar nav ul li a.active {
+      background: var(--primary-light);
+    }
+
+    /* Main Content */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Navbar */
+    .topbar { background: #fff; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .topbar h1 { font-size: 2.0rem; font-weight: 600; }
+    .topbar a { color: var(--primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; }
+    .topbar a i { margin-right: 6px; font-size: 1.2rem; }
+
+    /* Form Card */
+    .content {
+      flex: 1;
+      padding: 30px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: var(--bg-light);
+    }
+    .form-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 30px;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      transition: transform var(--transition);
+    }
+    .form-card:hover {
+      transform: translateY(-3px);
+    }
+    .form-card h2 {
+      margin-bottom: 20px;
+      font-size: 1.8rem;
+      color: var(--primary);
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .form-group select,
+    .form-group input[type="number"],
+    .form-group input[type="date"],
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      font-size: 1rem;
+      border: 1px solid rgba(0,0,0,0.1);
+      border-radius: var(--radius);
+      transition: border-color var(--transition);
+    }
+    .form-group select:focus,
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+    }
+
+    /* Radio Buttons Inline */
+    .form-group .radio-group {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .radio-custom {
+      position: relative;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .radio-custom input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+    .radio-custom .radio-mark {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background var(--transition);
+    }
+    .radio-custom .radio-mark::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--primary);
+      opacity: 0;
+      transition: opacity var(--transition);
+    }
+    .radio-custom input:checked ~ .radio-mark::after {
+      opacity: 1;
+    }
+
+    /* Submit Button */
+    .btn-submit {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--primary);
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+    .btn-submit:hover {
+      background: var(--primary-light);
+    }
+
+    /* Logout Button */
+    #logout {
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    #logout:hover {
+      background-color: #c0392b;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #fff;
+      box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo"><i class="bx bx-recycle"></i> WMS Admin</div>
+    <nav>
+      <ul>
+        <li><a href="homepage.html"><i class="bx bx-home"></i> Dashboard</a></li>
+        <li><a href="wasteForm.html"><i class="bx bx-plus-circle"></i> Schedule Waste</a></li>
+        <li><a href="report.html"><i class="bx bx-file"></i> Reports</a></li>
+        <li><a href="profile.html"><i class="bx bx-id-card"></i> Profile</a></li>
+        <li><a href="users.html"><i class="bx bx-user"></i> Users</a></li>
+        <li><a href="settings.html"><i class="bx bx-cog"></i> Settings</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Top Navbar -->
+    <header class="topbar">
+      <h1>Waste Form</h1>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a href="homepage.html"><i class="bx bx-arrow-back"></i> Back to Dashboard</a>
+        <button id="logout">Logout</button>
+      </div>
+    </header>
+
+    <!-- Form Section -->
+    <div class="content">
+      <div class="form-card">
+        <h2>Enter Waste Details</h2>
+        <form id="wasteForm">
+          <div class="form-group">
+            <label for="TypeInp">Waste Type</label>
+            <select id="TypeInp" required>
+              <option value="" disabled selected>Select type...</option>
+              <option value="Palm Oil">Palm Oil / Edible Oil</option>
+              <option value="Non-Ferrous Metals">Non-Ferrous Metals</option>
+              <option value="Rice">Rice</option>
+              <option value="Cocoa">Cocoa</option>
+              <option value="Fertilizer">Fertilizer</option>
+              <option value="Cement">Cement</option>
+              <option value="Offshore IMR">Offshore IMR Waste</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Condition</label>
+            <div class="radio-group">
+              <label class="radio-custom"><input type="radio" name="condition" value="Reusable" required><span class="radio-mark"></span> Reusable</label>
+              <label class="radio-custom"><input type="radio" name="condition" value="Flawed"><span class="radio-mark"></span> Flawed</label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="WeightInp">Weight (kg)</label>
+            <input type="number" id="WeightInp" placeholder="e.g., 125.50" min="0.01" step="0.01" required>
+          </div>
+
+          <div class="form-group">
+            <label for="LocationInp">Storage Location</label>
+            <select id="LocationInp" required>
+              <option value="" disabled selected>Select location...</option>
+              <option>Palm Oil Terminal</option>
+              <option>Metal Processing Unit</option>
+              <option>Rice Warehouse</option>
+              <option>Cocoa Warehouse</option>
+              <option>Fertilizer Depot</option>
+              <option>Port Terminal</option>
+              <option>IMR Workshop</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="DateInp">Submission Date</label>
+            <input type="date" id="DateInp" required>
+          </div>
+
+          <div class="form-group">
+            <label for="CommentsInp">Comments</label>
+            <textarea id="CommentsInp" rows="4" placeholder="Additional details..."></textarea>
+          </div>
+
+          <button type="submit" class="btn-submit" id="AddBtn">Add Waste</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2025 Waste Management System</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="../js/firebase-config.js"></script>
+  <script type="module" src="../js/firebaseauth.js"></script>
+  <script type="module" src="../js/wasteForm.js"></script>
+</body>
+</html>

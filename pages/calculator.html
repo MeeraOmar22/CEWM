@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Port CO₂e Emission Module</title>
+  <!-- Reuse global stylesheet for consistent look -->
+  <link rel="stylesheet" href="../css/style.css">
+  <!-- jsPDF for PDF generation -->
+   <script type="module" src="../js/calculator.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    /* Container card matches homepage/dashboard cards */
+    .module-card {
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 24px;
+      max-width: 600px;
+      margin: 40px auto;
+    }
+    h2 {
+      color: #3b5998;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+    .field-group {
+      margin-bottom: 16px;
+    }
+    .field-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #333;
+    }
+    .field-group input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .btn-primary {
+      display: inline-block;
+      background-color: #3b5998;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .btn-primary:hover {
+      background-color: #2e4874;
+    }
+    .output, .info-text {
+      margin-top: 20px;
+      padding: 12px;
+      background: #f0f0f0;
+      border-radius: 4px;
+      font-size: 1rem;
+      color: #333;
+    }
+    .info-text {
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="module-card">
+    <h2>Port Operations CO₂e Calculator</h2>
+
+    <!-- Input fields for different port sources -->
+    <div class="field-group">
+      <label for="shipFuel">Ship Fuel Consumption (liters)</label>
+      <input type="number" id="shipFuel" placeholder="e.g. 5000" min="0" step="1">
+    </div>
+
+    <div class="field-group">
+      <label for="rtgDiesel">RTG Diesel Used (liters)</label>
+      <input type="number" id="rtgDiesel" placeholder="e.g. 200" min="0" step="0.1">
+    </div>
+
+    <div class="field-group">
+      <label for="electricity">Electricity Usage (kWh)</label>
+      <input type="number" id="electricity" placeholder="e.g. 1500" min="0" step="1">
+    </div>
+
+    <button class="btn-primary" id="computeBtn">Compute Total CO₂e</button>
+    <button class="btn-primary" id="pdfBtn">Generate PDF Report</button>
+
+    <!-- Info & results -->
+    <div class="info-text" id="formula">
+      Formula: sum of (source amount × GWP factor) = Total CO₂e
+    </div>
+    <div class="output" id="breakdown">Enter values and click Compute.</div>
+    <div class="output" id="totalCO2e"></div>
+    <div class="output" id="treesEquivalent"></div>
+
+  </div>
+
+  <script>
+    
+
+    const absorptionPerTree = 21.7;  // kg CO₂e absorbed per tree per year
+
+
+    // Emission factors (kg CO₂e per unit)
+    const factors = {
+      shipFuel: 3.17,      // per liter of marine diesel oil
+      rtgDiesel: 2.68,     // per liter of diesel
+      electricity: 0.5     // per kWh (grid average)
+    };
+
+    const shipIn  = document.getElementById('shipFuel');
+    const rtgIn   = document.getElementById('rtgDiesel');
+    const treesEqDiv = document.getElementById('treesEquivalent');  
+    const elecIn  = document.getElementById('electricity');
+    const breakdownDiv = document.getElementById('breakdown');
+    const totalDiv     = document.getElementById('totalCO2e');
+    const computeBtn   = document.getElementById('computeBtn');
+    const pdfBtn       = document.getElementById('pdfBtn');
+
+    computeBtn.addEventListener('click', () => {
+      const shipVal = parseFloat(shipIn.value) || 0;
+      const rtgVal  = parseFloat(rtgIn.value)  || 0;
+      const elecVal = parseFloat(elecIn.value) || 0;
+
+      // Calculate per-source
+      const shipCO2e = shipVal * factors.shipFuel;
+      const rtgCO2e  = rtgVal  * factors.rtgDiesel;
+      const elecCO2e = elecVal * factors.electricity;
+      const total    = shipCO2e + rtgCO2e + elecCO2e;
+
+      // Show breakdown
+      breakdownDiv.innerHTML = `
+        Ships: ${shipVal} L × ${factors.shipFuel} = ${shipCO2e.toFixed(2)} kg CO₂e<br>
+        RTGs: ${rtgVal} L × ${factors.rtgDiesel} = ${rtgCO2e.toFixed(2)} kg CO₂e<br>
+        Electricity: ${elecVal} kWh × ${factors.electricity} = ${elecCO2e.toFixed(2)} kg CO₂e
+      `;
+      totalDiv.textContent = `Total CO₂e: ${total.toFixed(2)} kg`;
+
+      const trees = total / absorptionPerTree;
+      treesEqDiv.textContent = `Equivalent to ${trees.toFixed(1)} trees per year.`;
+
+    });
+
+    pdfBtn.addEventListener('click', () => {
+      const { jsPDF } = window.jspdf;  // fixed destructuring
+      const doc = new jsPDF();
+      doc.setFontSize(14);
+      doc.text('Port CO₂e Emission Report', 20, 20);
+      doc.setFontSize(12);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 30);
+      doc.text(`Ship Fuel: ${shipIn.value} L`, 20, 40);
+      doc.text(`RTG Diesel: ${rtgIn.value} L`, 20, 50);
+      doc.text(`Electricity: ${elecIn.value} kWh`, 20, 60);
+      doc.text(breakdownDiv.textContent, 20, 75);
+      doc.text(totalDiv.textContent, 20, 110);
+      doc.save('Port_CO2e_Report.pdf');
+    });
+  </script>
+</body>
+</html>
